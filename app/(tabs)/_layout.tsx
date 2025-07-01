@@ -1,62 +1,61 @@
-import { Tabs } from "expo-router";
 import { Feather } from "@expo/vector-icons";
-import { Platform, Pressable } from "react-native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+
+import Home from "@/app/(tabs)/index";
+import MyScales from "@/app/(tabs)/MyScales";
+
+const Tab = createMaterialTopTabNavigator();
 
 export default function TabsLayout() {
   return (
-    <Tabs
+    <Tab.Navigator
+      tabBarPosition="bottom"
       screenOptions={{
-        headerShown: false,
         tabBarStyle: {
           height: 140,
-          borderTopWidth: 0,
+          paddingBottom: 40,
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#202024",
         },
-        tabBarActiveBackgroundColor: "#202024",
-        tabBarInactiveBackgroundColor: "#202024",
+        tabBarIndicatorStyle: {
+          backgroundColor: "transparent",
+          height: 0,
+        },
         tabBarActiveTintColor: "#F7DD43",
         tabBarInactiveTintColor: "#8D8D99",
-        tabBarLabelPosition: "beside-icon",
-        tabBarLabelStyle: {
-          marginLeft: 30,
-          fontSize: 16,
-          fontFamily: "Archivo_700Bold",
-          marginBottom: Platform.OS === "ios" ? 30 : null,
+        tabBarItemStyle: {
+          flexDirection: "row",
         },
-        tabBarIconStyle: {
-          marginBottom: Platform.OS === "ios" ? 30 : null,
+        tabBarLabelStyle: {
+          fontSize: 16,
+          marginLeft: 16,
+          fontFamily: "Archivo_700Bold",
         },
       }}
     >
-      <Tabs.Screen
-        name="index"
+      <Tab.Screen
+        name="Home"
         options={{
-          title: "Gerar escala",
-          tabBarIcon: ({ color }) => (
-            <Feather size={18} name="plus-circle" color={color} />
-          ),
-          tabBarButton: (props) => (
-            <Pressable
-              {...(props as React.ComponentProps<typeof Pressable>)}
-              android_ripple={{ color: "transparent" }}
-            />
-          ),
+          title: "Início",
+          tabBarIcon: ({ color }) => {
+            return <Feather size={18} name="plus-circle" color={color} />;
+          },
+          tabBarPressColor: "transparent",
         }}
+        component={Home}
       />
-      <Tabs.Screen
+      <Tab.Screen
         name="MyScales"
         options={{
           title: "Minhas escalas",
-          tabBarIcon: ({ color }) => (
-            <Feather size={18} name="map" color={color} />
-          ),
-          tabBarButton: (props) => (
-            <Pressable
-              {...(props as React.ComponentProps<typeof Pressable>)}
-              android_ripple={{ color: "transparent" }}
-            />
-          ),
+          tabBarIcon: ({ color }) => {
+            return <Feather size={18} name="map" color={color} />;
+          },
+          tabBarPressColor: "transparent",
         }}
+        component={MyScales}
       />
-    </Tabs>
+    </Tab.Navigator>
   );
 }

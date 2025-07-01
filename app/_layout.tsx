@@ -1,8 +1,8 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import { Platform } from "react-native";
 import React, { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
+import { Platform, View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import * as NavigationBar from "expo-navigation-bar";
 import {
@@ -34,7 +34,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (Platform.OS === "android") {
-      NavigationBar.setStyle("dark");
+      NavigationBar.setStyle("light");
     }
 
     if (fontsLoaded || fontError) {
@@ -47,13 +47,18 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="(tabs)" />
-      <StatusBar translucent style="light" />
-    </Stack>
+    <View className="flex-1 bg-[#121214]">
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: {
+            backgroundColor: "#121214",
+          },
+        }}
+      >
+        <Stack.Screen name="(tabs)" />
+        <StatusBar translucent style="light" />
+      </Stack>
+    </View>
   );
 }
