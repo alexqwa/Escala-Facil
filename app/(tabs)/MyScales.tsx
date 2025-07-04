@@ -34,7 +34,7 @@ export default function MyScales() {
               return (
                 <ScaleCard
                   onPress={() =>
-                    router.push({
+                    router.replace({
                       pathname: "/editables/[id]",
                       params: { id: item.id, editing: JSON.stringify(true) },
                     })

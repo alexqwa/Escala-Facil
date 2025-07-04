@@ -26,13 +26,7 @@ interface ColaboratorItem {
 }
 
 export default function EditablePage() {
-  const {
-    saveScale,
-    updateScale,
-    currentScale,
-    getScaleById,
-    removeColaborator,
-  } = useScale();
+  const { saveScale, updateScale, currentScale, getScaleById } = useScale();
   const { id, editing } = useLocalSearchParams();
 
   const monthFormatted =
@@ -96,22 +90,12 @@ export default function EditablePage() {
     } catch (err) {
       console.error("Error updating scale:", err);
     } finally {
-      router.push("/MyScales");
+      router.replace("/MyScales");
     }
   };
 
-  const handleRemoveColaborator = async (colabName: string) => {
-    if (!currentScale) return;
-
-    try {
-      const success = await removeColaborator(currentScale.id, colabName);
-      if (success) {
-        // Atualiza a lista local de colaboradores
-        setColaborators((prev) => prev.filter((c) => c.name !== colabName));
-      }
-    } catch (err) {
-      console.error("Error removing colaborator:", err);
-    }
+  const handleRemoveColaborator = (colabName: string) => {
+    setColaborators((prev) => prev.filter((c) => c.name !== colabName));
   };
 
   useEffect(() => {
@@ -133,7 +117,7 @@ export default function EditablePage() {
   return (
     <View className="flex-1 items-center bg-[#121214]">
       <Header
-        back
+        back={Boolean(!editing)}
         title={Boolean(editing) ? "EDITAR ESCALA" : "GERAR ESCALA"}
       />
       <View className="max-w-[85%] w-full flex-1 mt-16">
@@ -172,7 +156,6 @@ export default function EditablePage() {
                     Turno
                   </Text>
                 </View>
-
                 <FlatList
                   data={colaborators}
                   scrollEnabled={false}
@@ -202,7 +185,6 @@ export default function EditablePage() {
                     </View>
                   )}
                 />
-
                 {showColaboratorInput ? (
                   <View className="w-full overflow-hidden flex-row h-14 rounded-xl bg-[#202024] divide-x-[1px] divide-[#323238] border border-[#323238]">
                     <TextInput
