@@ -1,17 +1,21 @@
-import { useEffect } from "react";
+import { useCallback } from "react";
+import { router } from "expo-router";
 import { View, FlatList, Text } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
-import { useScales } from "@/src/hooks/useScales";
+import { useScale } from "@/src/hooks/useScale";
 
 import { Header } from "@/src/components/Header";
 import { ScaleCard } from "@/src/components/ScaleCard";
 
 export default function MyScales() {
-  const { loadScales, scales, deleteScale } = useScales();
+  const { scales, getAllScales, deleteScale } = useScale();
 
-  useEffect(() => {
-    loadScales();
-  }, [scales]);
+  useFocusEffect(
+    useCallback(() => {
+      getAllScales();
+    }, [])
+  );
 
   return (
     <View className="flex-1 bg-[#121214] items-center">
@@ -23,18 +27,22 @@ export default function MyScales() {
         <View className="space-y-6">
           <FlatList
             data={scales}
-            keyExtractor={(item, index) => String(index)}
-            showsVerticalScrollIndicator={false}
             scrollEnabled={false}
-            renderItem={({ item, index }) => {
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => {
               return (
                 <ScaleCard
-                  key={index}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/editables/[id]",
+                      params: { id: item.id, editing: JSON.stringify(true) },
+                    })
+                  }
                   title={item.title}
-                  timestamp={item.month}
-                  quantCollaborators={item.collaborators.length}
-                  deleteScale={() => deleteScale(index)}
-                  editScale={() => console.log("Edição de escala")}
+                  period={item.month}
+                  colaborators={item.colaborators.length}
+                  deleteScale={() => deleteScale(item.id)}
                 />
               );
             }}

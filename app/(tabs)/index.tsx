@@ -1,14 +1,19 @@
 import clsx from "clsx";
+import dayjs from "dayjs";
+import { useState } from "react";
 import { router } from "expo-router";
 import { View, Text, TouchableOpacity } from "react-native";
-
-import { useScales } from "@/src/hooks/useScales";
 
 import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
 
 export default function Home() {
-  const { currentScale, updatedCurrentScale } = useScales();
+  const monthFormatted =
+    dayjs().format("MMMM").charAt(0).toUpperCase() +
+    dayjs().format("MMMM").slice(1);
+  const [title, setTitle] = useState("");
+  const [month, setMonth] = useState(monthFormatted);
+  const [year, setYear] = useState(dayjs().format("YYYY"));
 
   return (
     <View className="flex-1 items-center bg-[#121214]">
@@ -19,26 +24,28 @@ export default function Home() {
           {"\n"}inteligente!
         </Text>
         <Form
-          title={currentScale.title}
-          changeTitle={(text) => updatedCurrentScale("title", text)}
+          title={title}
+          month={month}
+          year={year}
+          changeTextTitle={setTitle}
+          changeTextMonth={setMonth}
+          changeTextYear={setYear}
         />
         <TouchableOpacity
           activeOpacity={0.8}
-          disabled={!currentScale.title}
-          className={clsx(
-            "w-full mt-6 h-14 bg-[#f7dd43] rounded-xl items-center justify-center",
-            {
-              ["opacity-70"]: !currentScale.title,
-            }
-          )}
+          disabled={!title || !month || !year}
           onPress={() =>
             router.push({
               pathname: "/editables/[id]",
-              params: {
-                id: currentScale.title,
-              },
+              params: { id: title },
             })
           }
+          className={clsx(
+            "w-full mt-6 h-14 bg-[#f7dd43] rounded-xl items-center justify-center",
+            {
+              ["opacity-70"]: !title || !month || !year,
+            }
+          )}
         >
           <Text className="text-black font-archivo_700 text-base">
             GERAR ESCALA

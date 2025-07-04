@@ -9,7 +9,7 @@ interface HeaderProps {
 
 export function Header({ title, back }: HeaderProps) {
   return (
-    <View className="w-full items-center justify-center bg-[#202024] py-12">
+    <View className="w-full items-center justify-center bg-[#202024] py-12 z-50">
       <View className="relative max-w-[85%] w-full items-center justify-center mt-4">
         {back ? (
           <TouchableOpacity

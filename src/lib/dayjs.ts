@@ -6,3 +6,4 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 dayjs.locale("pt-br");
 dayjs.extend(duration);
 dayjs.extend(localizedFormat);
+
