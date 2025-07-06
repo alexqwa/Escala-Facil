@@ -2,7 +2,7 @@
   "expo": {
     "name": "Scalegen",
     "slug": "scalegen",
-    "version": "1.0.8",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "scalegen",
@@ -21,7 +21,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#202024"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.outumegames.scalegen"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +32,13 @@
     "plugins": ["expo-router", "expo-font"],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b91ba4aa-292d-4c8f-8199-ab8521f736d4"
+      }
+    },
+    "owner": "devbanned"
   }
 }

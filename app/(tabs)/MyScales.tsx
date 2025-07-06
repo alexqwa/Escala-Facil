@@ -40,7 +40,7 @@ export default function MyScales() {
                     })
                   }
                   title={item.title}
-                  period={item.month}
+                  period={item.periodScale}
                   colaborators={item.colaborators.length}
                   deleteScale={() => deleteScale(item.id)}
                 />

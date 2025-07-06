@@ -8,11 +8,8 @@ import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
 
 export default function Home() {
-  const monthFormatted =
-    dayjs().format("MMMM").charAt(0).toUpperCase() +
-    dayjs().format("MMMM").slice(1);
   const [title, setTitle] = useState("");
-  const [month, setMonth] = useState(monthFormatted);
+  const [month, setMonth] = useState(dayjs().month());
   const [year, setYear] = useState(dayjs().format("YYYY"));
 
   return (
@@ -24,12 +21,12 @@ export default function Home() {
           {"\n"}inteligente!
         </Text>
         <Form
-          title={title}
-          month={month}
           year={year}
-          changeTextTitle={setTitle}
-          changeTextMonth={setMonth}
-          changeTextYear={setYear}
+          title={title}
+          month={month.toString()}
+          onChangeYear={setYear}
+          onChangeTitle={setTitle}
+          onChangeMonth={(text: string) => setMonth(Number(text))}
         />
         <TouchableOpacity
           activeOpacity={0.8}
@@ -37,7 +34,7 @@ export default function Home() {
           onPress={() =>
             router.push({
               pathname: "/editables/[id]",
-              params: { id: title },
+              params: { id: title, dateMonth: month, dateYear: year },
             })
           }
           className={clsx(

@@ -34,7 +34,13 @@ const useScale = () => {
   const createPeriodScale = useCallback((month: string) => {
     const currentMonth = dayjs().month(parseInt(month) - 1);
     const nextMonth = currentMonth.add(1, "month");
-    return `${currentMonth.format("MMMM")} - ${nextMonth.format("MMMM")}`;
+    return `${
+      currentMonth.format("MMMM").charAt(0).toUpperCase() +
+      currentMonth.format("MMMM").slice(1)
+    } - ${
+      nextMonth.format("MMMM").charAt(0).toUpperCase() +
+      nextMonth.format("MMMM").slice(1)
+    }`;
   }, []);
 
   // Load all scales from storage
