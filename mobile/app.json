@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Scalegen",
-    "slug": "scalegen",
+    "name": "Escala Fácil",
+    "slug": "escala-facil",
     "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "scalegen",
+    "scheme": "escalafacil",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -22,7 +22,7 @@
         "backgroundColor": "#202024"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.outumegames.scalegen"
+      "package": "com.outumegames.escalafacil"
     },
     "web": {
       "bundler": "metro",

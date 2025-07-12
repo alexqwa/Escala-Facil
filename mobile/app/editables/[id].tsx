@@ -26,10 +26,16 @@ interface ColaboratorItem {
   isSun: boolean;
 }
 
+interface DayItem {
+  id: number;
+  day: string;
+}
+
 export default function EditablePage() {
   const { id, editing, dateMonth, dateYear } = useLocalSearchParams();
   const { saveScale, updateScale, currentScale, getScaleById } = useScale();
 
+  const [days, setDays] = useState<DayItem[]>([]);
   const [year, setYear] = useState(dateYear);
   const [month, setMonth] = useState(dateMonth);
   const [title, setTitle] = useState(id.toString());
@@ -183,6 +189,7 @@ export default function EditablePage() {
                     name={item.name}
                     isSun={item.isSun}
                     onPress={() => handleRemoveColaborator(item.name)}
+                    onSelect={(newDays) => setDays(newDays)}
                   />
                 )}
               />

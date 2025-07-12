@@ -1,11 +1,10 @@
-// hooks/useScale.ts
+import dayjs from "dayjs";
 import { useState, useEffect, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import dayjs from "dayjs";
 
 interface Colaborator {
   name: string;
-  isSun: boolean; // true for sun (day), false for night
+  isSun: boolean;
 }
 
 interface Scale {
