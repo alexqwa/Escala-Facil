@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Weekday {
+  id            Int          @id @default(autoincrement())
+  day           Int
+  Colaborator   Colaborator @relation(fields: [colaboratorId], references: [id], onDelete: Cascade)
+  colaboratorId Int
+
+  @@map("weekdays")
+}
+
+model Scale {
+  id           Int           @id @default(autoincrement())
+  title        String
+  periodScale  String
+  colaborators Colaborator[]
+
+  @@map("scales")
+}
+
+model Colaborator {
+  id      Int       @id @default(autoincrement())
+  name    String
+  turn    Boolean
+  sunday  Int
+  scaleId Int
+  scale   Scale     @relation(fields: [scaleId], references: [id], onDelete: Cascade)
+  weekday Weekday[]
+
+  @@map("colaborators")
+}

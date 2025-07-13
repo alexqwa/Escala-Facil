@@ -12,7 +12,7 @@ import { Day } from "@/src/components/Day";
 interface ColaboratorProps extends TouchableOpacityProps {
   name: string;
   isSun: boolean;
-  onDaysSelected: (selectedDays: number[]) => void; // Callback to pass selected days
+  onDaysSelected: (selectedDays: number[]) => void;
 }
 
 const days = [

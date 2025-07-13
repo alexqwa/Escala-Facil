@@ -24,7 +24,7 @@ export function ScaleCard({
     <View className="bg-[#202024] rounded-xl flex-row overflow-hidden mb-4">
       <View className="space-y-4 p-4 flex-1">
         <Text className="text-base font-archivo_700 uppercase text-white">
-          ESCALA: {title}
+          {title}
         </Text>
         <View className="flex-row space-x-4 items-center">
           <View className="flex-row items-center space-x-2">
