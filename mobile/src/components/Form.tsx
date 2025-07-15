@@ -39,12 +39,13 @@ export function Form({
           </Text>
           <TextInput
             value={month}
-            keyboardType="number-pad"
             onChangeText={onChangeMonth}
             className="input-custom w-full bg-[#202024] h-14 rounded-xl px-4 border-2 border-[#202024] text-white text-base font-archivo_600 focus:border-2 focus:border-[#323238] transition-all delay-300"
             placeholder="Mês de referência"
             placeholderTextColor="#E1E1E6"
+            keyboardType="number-pad"
             cursorColor="#fff"
+            maxLength={2}
           />
         </View>
 
@@ -54,12 +55,13 @@ export function Form({
           </Text>
           <TextInput
             value={year}
-            keyboardType="number-pad"
             onChangeText={onChangeYear}
             className="input-custom w-full bg-[#202024] h-14 rounded-xl px-4 border-2 border-[#202024] text-white text-base font-archivo_600 focus:border-2 focus:border-[#323238] transition-all delay-300"
             placeholder="Ano de referência"
             placeholderTextColor="#E1E1E6"
+            keyboardType="number-pad"
             cursorColor="#fff"
+            maxLength={4}
           />
         </View>
       </View>

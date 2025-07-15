@@ -9,8 +9,8 @@ import { Header } from "@/src/components/Header";
 
 export default function Home() {
   const [title, setTitle] = useState("");
-  const [month, setMonth] = useState(dayjs().month());
   const [year, setYear] = useState(dayjs().format("YYYY"));
+  const [month, setMonth] = useState(dayjs().month().toString());
 
   return (
     <View className="flex-1 items-center bg-[#121214]">
@@ -22,11 +22,11 @@ export default function Home() {
         </Text>
         <Form
           year={year}
+          month={month}
           title={title}
-          month={month.toString()}
           onChangeYear={setYear}
+          onChangeMonth={setMonth}
           onChangeTitle={setTitle}
-          onChangeMonth={(text: string) => setMonth(Number(text))}
         />
         <TouchableOpacity
           activeOpacity={0.8}

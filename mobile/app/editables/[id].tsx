@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import dayjs from "dayjs";
+import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
@@ -16,6 +17,7 @@ import {
 } from "react-native";
 
 import { api } from "@/src/lib/axios";
+import { useMonthPair } from "@/src/hooks/useMonthPair";
 
 import { Day } from "@/src/components/Day";
 import { Header } from "@/src/components/Header";
@@ -35,14 +37,9 @@ interface Colaborators {
 }
 
 export default function EditablePage() {
-  const { editing } = useLocalSearchParams();
-
-  const [scale, setScale] = useState<Scale>({
-    title: "",
-    periodScale: "",
-    colaborators: [],
-  });
-  const [title, setTitle] = useState("");
+  const { id, dateMonth, dateYear, editing } = useLocalSearchParams();
+  const [title, setTitle] = useState(id.toString());
+  const [month, setMonth] = useState(dateMonth.toString());
   const [periodScale, setPeriodScale] = useState("");
 
   const [colaborators, setColaborators] = useState<Colaborators[]>([]);
@@ -52,6 +49,11 @@ export default function EditablePage() {
   const [colaboratorWeekday, setColaboratorWeekday] = useState<number[]>([]);
 
   const [showColaboratorInput, setShowColaboratorInput] = useState(false);
+
+  useEffect(() => {
+    const monthPair = useMonthPair(Number(month));
+    setPeriodScale(monthPair);
+  }, [month]);
 
   const handleAddColaborator = () => {
     if (!colaboratorName.trim()) {
@@ -116,7 +118,7 @@ export default function EditablePage() {
   };
 
   async function handleSubmit() {
-    if (!title.trim() || colaborators.length === 0) {
+    if (!title.trim() || !periodScale.trim() || colaborators.length === 0) {
       Alert.alert("Erro", "Todos os campos são obrigatórios.");
       return;
     }
@@ -126,24 +128,18 @@ export default function EditablePage() {
       colaborators,
     };
     try {
-      const response = await api.post<Scale>("/scales", scaleData);
-      console.log(response.data);
+      const response = await api.post("/scales", scaleData);
       Alert.alert("Sucesso", "Dados enviados com sucesso!");
-      // Limpar os campos após o envio
+      console.log(response.data);
       setTitle("");
       setPeriodScale("");
       setColaborators([]);
+      router.replace("/(tabs)/MyScales");
     } catch (error) {
       console.error(error);
       Alert.alert("Erro", "Ocorreu um erro ao enviar os dados.");
     }
   }
-
-  useEffect(() => {
-    setScale({ title, periodScale, colaborators });
-  }, [title, periodScale, colaborators]);
-
-  console.log(scale);
 
   return (
     <View className="flex-1 items-center bg-[#121214]">
@@ -179,11 +175,14 @@ export default function EditablePage() {
                   Mês
                 </Text>
                 <TextInput
+                  value={month.trim()}
+                  onChangeText={setMonth}
                   keyboardType="number-pad"
                   className="input-custom w-full bg-[#202024] h-14 rounded-xl px-4 border-2 border-[#202024] text-white text-base font-archivo_600 focus:border-2 focus:border-[#323238] transition-all delay-300"
                   placeholder="Mês de referência"
                   placeholderTextColor="#E1E1E6"
                   cursorColor="#fff"
+                  maxLength={2}
                 />
               </View>
 
@@ -192,11 +191,13 @@ export default function EditablePage() {
                   Ano
                 </Text>
                 <TextInput
+                  value={dateYear.toString()}
                   keyboardType="number-pad"
                   className="input-custom w-full bg-[#202024] h-14 rounded-xl px-4 border-2 border-[#202024] text-white text-base font-archivo_600 focus:border-2 focus:border-[#323238] transition-all delay-300"
                   placeholder="Ano de referência"
                   placeholderTextColor="#E1E1E6"
                   cursorColor="#fff"
+                  maxLength={4}
                 />
               </View>
             </View>
@@ -206,7 +207,7 @@ export default function EditablePage() {
               </Text>
               <View className="w-full bg-[#202024] h-14 rounded-xl px-4 justify-center">
                 <Text className="text-[#E1E1E6] font-archivo_600 text-base">
-                  Julho - Agosto
+                  {periodScale}
                 </Text>
               </View>
             </View>
@@ -253,10 +254,11 @@ export default function EditablePage() {
                         onChangeText={(text) =>
                           setColaboratorSunday(Number(text))
                         }
-                        className="text-white font-archivo_600 text-base px-2"
-                        placeholder="DSR"
+                        className="text-white w-full text-center font-archivo_600 text-base flex-1"
+                        placeholder="0"
                         placeholderTextColor="#e1e1e5"
                         cursorColor="#fff"
+                        keyboardType="number-pad"
                       />
                     </View>
                     <TouchableOpacity

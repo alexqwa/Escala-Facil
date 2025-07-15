@@ -5,7 +5,7 @@
     "version": "1.1.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "escalafacil",
+    "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
