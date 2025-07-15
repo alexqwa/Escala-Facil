@@ -2,7 +2,7 @@
   "expo": {
     "name": "Escala Fácil",
     "slug": "escala-facil",
-    "version": "1.1.0",
+    "version": "1.1.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "escalafacil",

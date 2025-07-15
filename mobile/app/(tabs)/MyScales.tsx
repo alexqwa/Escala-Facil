@@ -3,20 +3,10 @@ import { router } from "expo-router";
 import { View, FlatList, Text } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
-import { useScale } from "@/src/hooks/useScale";
-
 import { Header } from "@/src/components/Header";
 import { ScaleCard } from "@/src/components/ScaleCard";
 
 export default function MyScales() {
-  const { scales, getAllScales, deleteScale } = useScale();
-
-  useFocusEffect(
-    useCallback(() => {
-      getAllScales();
-    }, [])
-  );
-
   return (
     <View className="flex-1 bg-[#121214] items-center">
       <Header title="MINHAS ESCALAS" />
@@ -25,7 +15,7 @@ export default function MyScales() {
           Minhas Escalas
         </Text>
         <View className="space-y-6">
-          <FlatList
+          {/* <FlatList
             data={scales}
             scrollEnabled={false}
             keyExtractor={(item) => item.id}
@@ -46,7 +36,7 @@ export default function MyScales() {
                 />
               );
             }}
-          />
+          /> */}
         </View>
       </View>
     </View>

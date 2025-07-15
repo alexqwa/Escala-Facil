@@ -8,14 +8,14 @@ import {
 
 interface ScaleCardProps extends TouchableOpacityProps {
   title: string;
-  period: string;
+  periodScale: string;
   colaborators: number;
   deleteScale: () => void;
 }
 
 export function ScaleCard({
   title,
-  period,
+  periodScale,
   deleteScale,
   colaborators,
   ...rest
@@ -29,7 +29,7 @@ export function ScaleCard({
         <View className="flex-row space-x-4 items-center">
           <View className="flex-row items-center space-x-2">
             <Feather name="calendar" color="#fff" size={16} />
-            <Text className="text-white font-archivo_600">{period}</Text>
+            <Text className="text-white font-archivo_600">{periodScale}</Text>
           </View>
           <View className="flex-row items-center space-x-2">
             <Feather name="user" size={16} color="#fff" />
