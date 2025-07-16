@@ -12,7 +12,7 @@ export default function MyScales() {
       <Header title="MINHAS ESCALAS" />
       <View className="max-w-[85%] w-full flex-1 mt-16">
         <Text className="text-white font-archivo_700 text-3xl mb-6">
-          Minhas Escalas
+          Minhas escalas
         </Text>
         <View className="space-y-6">
           {/* <FlatList

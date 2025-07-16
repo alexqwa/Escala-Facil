@@ -1,11 +1,11 @@
-import clsx from "clsx";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { router } from "expo-router";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 
 import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
+import { Button } from "@/src/components/Button";
 
 export default function Home() {
   const [title, setTitle] = useState("");
@@ -28,29 +28,22 @@ export default function Home() {
           onChangeMonth={setMonth}
           onChangeTitle={setTitle}
         />
-        <TouchableOpacity
-          activeOpacity={0.8}
+        <View className="mt-6" />
+        <Button
+          isChange
+          title="GERAR ESCALA"
           disabled={!title || !month || !year}
+          isInactive={!title || !month || !year}
           onPress={() =>
             router.push({
               pathname: "/editables/[id]",
               params: { id: title, dateMonth: month, dateYear: year },
             })
           }
-          className={clsx(
-            "w-full mt-6 h-14 bg-[#f7dd43] rounded-xl items-center justify-center",
-            {
-              ["opacity-70"]: !title || !month || !year,
-            }
-          )}
-        >
-          <Text className="text-black font-archivo_700 text-base">
-            GERAR ESCALA
-          </Text>
-        </TouchableOpacity>
+        />
         <Text className="text-[#c4c4cc] font-poppins_400 text-sm mt-6 text-center">
           Após gerar sua escala, você será redirecionado{"\n"}para tela onde
-          você poderá edita-la.
+          você poderá edita-la.{"\n"}Feito por Alexandre ❤️
         </Text>
       </View>
     </View>

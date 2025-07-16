@@ -1,13 +1,9 @@
 import clsx from "clsx";
-import dayjs from "dayjs";
-import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import {
   Text,
   View,
-  Alert,
   Platform,
   FlatList,
   TextInput,
@@ -16,130 +12,37 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 
-import { api } from "@/src/lib/axios";
-import { useMonthPair } from "@/src/hooks/useMonthPair";
+import { useScale } from "@/src/hooks/useScale";
+import { useColaborators } from "@/src/hooks/useColaborators";
 
 import { Day } from "@/src/components/Day";
+import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
 import { ColaboratorItem } from "@/src/components/ColaboratorItem";
-
-interface Scale {
-  title: string;
-  periodScale: string;
-  colaborators: Colaborators[];
-}
-
-interface Colaborators {
-  name: string;
-  turn: boolean;
-  sunday: number;
-  weekday: number[];
-}
+import { Button } from "@/src/components/Button";
 
 export default function EditablePage() {
   const { id, dateMonth, dateYear, editing } = useLocalSearchParams();
-  const [title, setTitle] = useState(id.toString());
-  const [month, setMonth] = useState(dateMonth.toString());
-  const [periodScale, setPeriodScale] = useState("");
 
-  const [colaborators, setColaborators] = useState<Colaborators[]>([]);
-  const [colaboratorName, setColaboratorName] = useState("");
-  const [colaboratorTurn, setColaboratorTurn] = useState(true);
-  const [colaboratorSunday, setColaboratorSunday] = useState(0);
-  const [colaboratorWeekday, setColaboratorWeekday] = useState<number[]>([]);
+  const {
+    weekdays,
+    toggleDay,
+    colaborators,
+    isDaySelected,
+    colaboratorName,
+    colaboratorTurn,
+    colaboratorSunday,
+    setColaboratorName,
+    setColaboratorTurn,
+    handleAddColaborator,
+    setColaboratorSunday,
+    showColaboratorInput,
+    handleRemoveColaborator,
+    setShowColaboratorInput,
+  } = useColaborators();
 
-  const [showColaboratorInput, setShowColaboratorInput] = useState(false);
-
-  useEffect(() => {
-    const monthPair = useMonthPair(Number(month));
-    setPeriodScale(monthPair);
-  }, [month]);
-
-  const handleAddColaborator = () => {
-    if (!colaboratorName.trim()) {
-      Alert.alert("Erro", "O nome do colaborador é obrigatório.");
-      return;
-    }
-
-    const newColaborator: Colaborators = {
-      name: colaboratorName,
-      turn: colaboratorTurn,
-      sunday: colaboratorSunday,
-      weekday: colaboratorWeekday,
-    };
-
-    setColaboratorName("");
-    setColaboratorSunday(0);
-    setColaboratorTurn(true);
-    setColaboratorWeekday([]);
-    setColaborators([...colaborators, newColaborator]);
-    setShowColaboratorInput(false);
-  };
-
-  const handleRemoveColaborator = (name: string) => {
-    Alert.alert(
-      "Remover Colaborador",
-      `Você tem certeza que deseja remover ${name}?`,
-      [
-        {
-          text: "Cancelar",
-          style: "cancel",
-        },
-        {
-          text: "Remover",
-          onPress: () => {
-            setColaborators((prev) =>
-              prev.filter((colab) => colab.name !== name)
-            );
-          },
-        },
-      ]
-    );
-  };
-
-  const weekdays = [...Array(7)].map((_, i) => ({
-    day: i,
-    initial: dayjs().day(i).format("dddd").charAt(0).toUpperCase(),
-  }));
-
-  const toggleDay = (dayNumber: number) => {
-    setColaboratorWeekday((prev) => {
-      const existingIndex = prev.indexOf(dayNumber);
-      if (existingIndex >= 0) {
-        return prev.filter((day) => day !== dayNumber);
-      } else {
-        return [...prev, dayNumber];
-      }
-    });
-  };
-
-  const isDaySelected = (dayNumber: number) => {
-    return colaboratorWeekday.includes(dayNumber);
-  };
-
-  async function handleSubmit() {
-    if (!title.trim() || !periodScale.trim() || colaborators.length === 0) {
-      Alert.alert("Erro", "Todos os campos são obrigatórios.");
-      return;
-    }
-    const scaleData: Scale = {
-      title,
-      periodScale,
-      colaborators,
-    };
-    try {
-      const response = await api.post("/scales", scaleData);
-      Alert.alert("Sucesso", "Dados enviados com sucesso!");
-      console.log(response.data);
-      setTitle("");
-      setPeriodScale("");
-      setColaborators([]);
-      router.replace("/(tabs)/MyScales");
-    } catch (error) {
-      console.error(error);
-      Alert.alert("Erro", "Ocorreu um erro ao enviar os dados.");
-    }
-  }
+  const { title, month, periodScale, handleSubmit, setTitle, setMonth } =
+    useScale(id.toString(), dateMonth.toString());
 
   return (
     <View className="flex-1 items-center bg-[#121214]">
@@ -156,51 +59,13 @@ export default function EditablePage() {
           contentContainerStyle={{ paddingTop: 60, paddingBottom: 100 }}
         >
           <View className="space-y-4">
-            <View className="space-y-2">
-              <Text className="block text-sm font-archivo_700 text-white ml-2">
-                Título
-              </Text>
-              <TextInput
-                value={title}
-                onChangeText={setTitle}
-                className="input-custom w-full bg-[#202024] h-14 rounded-xl px-4 border-2 border-[#202024] text-white text-base font-archivo_600 focus:border-2 focus:border-[#323238] transition-all delay-300"
-                placeholder="Nome da escala"
-                placeholderTextColor="#E1E1E6"
-                cursorColor="#fff"
-              />
-            </View>
-            <View className="flex-row w-full space-x-4">
-              <View className="flex-1 space-y-2">
-                <Text className="block text-sm font-archivo_700 text-white ml-2">
-                  Mês
-                </Text>
-                <TextInput
-                  value={month.trim()}
-                  onChangeText={setMonth}
-                  keyboardType="number-pad"
-                  className="input-custom w-full bg-[#202024] h-14 rounded-xl px-4 border-2 border-[#202024] text-white text-base font-archivo_600 focus:border-2 focus:border-[#323238] transition-all delay-300"
-                  placeholder="Mês de referência"
-                  placeholderTextColor="#E1E1E6"
-                  cursorColor="#fff"
-                  maxLength={2}
-                />
-              </View>
-
-              <View className="flex-1 space-y-2">
-                <Text className="block text-sm font-archivo_700 text-white ml-2">
-                  Ano
-                </Text>
-                <TextInput
-                  value={dateYear.toString()}
-                  keyboardType="number-pad"
-                  className="input-custom w-full bg-[#202024] h-14 rounded-xl px-4 border-2 border-[#202024] text-white text-base font-archivo_600 focus:border-2 focus:border-[#323238] transition-all delay-300"
-                  placeholder="Ano de referência"
-                  placeholderTextColor="#E1E1E6"
-                  cursorColor="#fff"
-                  maxLength={4}
-                />
-              </View>
-            </View>
+            <Form
+              title={title}
+              month={month.toString()}
+              year={dateYear.toString()}
+              onChangeTitle={setTitle}
+              onChangeMonth={setMonth}
+            />
             <View className="space-y-2">
               <Text className="block text-sm font-archivo_700 text-white ml-2">
                 Período da escala

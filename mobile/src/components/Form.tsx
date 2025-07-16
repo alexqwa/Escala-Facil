@@ -4,9 +4,9 @@ interface FormType {
   title: string;
   month: string;
   year: string;
-  onChangeTitle: (text: string) => void;
-  onChangeMonth: (text: string) => void;
-  onChangeYear: (text: string) => void;
+  onChangeTitle?: (text: string) => void;
+  onChangeMonth?: (text: string) => void;
+  onChangeYear?: (text: string) => void;
 }
 
 export function Form({
