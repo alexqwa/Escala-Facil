@@ -12,37 +12,38 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 
-import { useScale } from "@/src/hooks/useScale";
-import { useColaborators } from "@/src/hooks/useColaborators";
+import { useScaleAndColaborators } from "@/src/hooks/useScaleAndColaborators";
 
 import { Day } from "@/src/components/Day";
 import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
 import { ColaboratorItem } from "@/src/components/ColaboratorItem";
-import { Button } from "@/src/components/Button";
 
 export default function EditablePage() {
   const { id, dateMonth, dateYear, editing } = useLocalSearchParams();
 
   const {
+    title,
+    month,
+    setTitle,
+    setMonth,
     weekdays,
     toggleDay,
+    periodScale,
     colaborators,
+    handleSubmit,
     isDaySelected,
     colaboratorName,
     colaboratorTurn,
     colaboratorSunday,
-    setColaboratorName,
     setColaboratorTurn,
-    handleAddColaborator,
+    setColaboratorName,
     setColaboratorSunday,
+    handleAddColaborator,
     showColaboratorInput,
     handleRemoveColaborator,
     setShowColaboratorInput,
-  } = useColaborators();
-
-  const { title, month, periodScale, handleSubmit, setTitle, setMonth } =
-    useScale(id.toString(), dateMonth.toString());
+  } = useScaleAndColaborators(id.toString(), dateMonth.toString());
 
   return (
     <View className="flex-1 items-center bg-[#121214]">

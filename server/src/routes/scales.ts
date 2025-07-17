@@ -90,4 +90,13 @@ export async function scaleRoutes(app: FastifyInstance) {
       reply.status(500).send({ error: 'Erro ao deletar a Scale' });
     }
   });
+
+  app.delete('/scales', async (request, reply) => {
+    try {
+      await prisma.scale.deleteMany();
+      reply.status(200).send('Todas as escalas foram deletadas com sucesso!');
+    } catch (error) {
+      reply.status(500).send({ error: 'Erro ao deletar as escalas' });
+    }
+  });
 }

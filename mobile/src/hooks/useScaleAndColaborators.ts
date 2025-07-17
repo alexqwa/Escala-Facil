@@ -1,6 +1,16 @@
 import dayjs from "dayjs";
-import { useState } from "react";
 import { Alert } from "react-native";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+
+import { api } from "@/src/lib/axios";
+import { useMonthPair } from "@/src/hooks/useMonthPair";
+
+interface Scale {
+  title: string;
+  periodScale: string;
+  colaborators: Colaborator[];
+}
 
 interface Colaborator {
   name: string;
@@ -9,7 +19,10 @@ interface Colaborator {
   weekday: number[];
 }
 
-export function useColaborators() {
+export function useScaleAndColaborators(id: string, dateMonth: string) {
+  const [title, setTitle] = useState(id);
+  const [month, setMonth] = useState(dateMonth);
+  const [periodScale, setPeriodScale] = useState("");
   const [colaborators, setColaborators] = useState<Colaborator[]>([]);
   const [colaboratorName, setColaboratorName] = useState("");
   const [colaboratorTurn, setColaboratorTurn] = useState(true);
@@ -17,11 +30,47 @@ export function useColaborators() {
   const [colaboratorWeekday, setColaboratorWeekday] = useState<number[]>([]);
   const [showColaboratorInput, setShowColaboratorInput] = useState(false);
 
+  useEffect(() => {
+    const monthPair = useMonthPair(Number(month));
+    setPeriodScale(monthPair);
+  }, [month]);
+
+  async function handleSubmit() {
+    if (!title.trim() || !periodScale.trim() || colaborators.length === 0) {
+      Alert.alert("Erro", "Todos os campos são obrigatórios.");
+      return;
+    }
+
+    const scaleData: Scale = {
+      title,
+      periodScale,
+      colaborators,
+    };
+
+    try {
+      const response = await api.post("/scales", scaleData);
+      Alert.alert("Sucesso", "Escala gerada com sucesso.");
+      console.log(response.data);
+      resetInputs();
+      router.replace("/(tabs)/MyScales");
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Erro", "Erro ao gerar sua escala!");
+    }
+  }
+
+  function resetInputs() {
+    setTitle("");
+    setPeriodScale("");
+    setColaborators([]);
+  }
+
   function handleAddColaborator() {
     if (!colaboratorName.trim()) {
       Alert.alert("Erro", "O nome do colaborador é obrigatório.");
       return;
     }
+
     const newColaborator: Colaborator = {
       name: colaboratorName,
       turn: colaboratorTurn,
@@ -34,8 +83,8 @@ export function useColaborators() {
 
   function handleRemoveColaborator(name: string) {
     Alert.alert(
-      "Remover Colaborador",
-      `Você tem certeza que deseja remover ${name}?`,
+      "Remover colaborador",
+      `Você tem certeza que deseja remover ${name}`,
       [
         {
           text: "Cancelar",
@@ -70,7 +119,7 @@ export function useColaborators() {
     setColaboratorWeekday((prev) => {
       const existingIndex = prev.indexOf(dayNumber);
       if (existingIndex >= 0) {
-        return prev.filter((day) => day !== dayNumber);
+        return prev.filter((day) => day != dayNumber);
       } else {
         return [...prev, dayNumber];
       }
@@ -82,10 +131,16 @@ export function useColaborators() {
   }
 
   return {
+    title,
+    setTitle,
+    month,
+    setMonth,
+    periodScale,
+    handleSubmit,
+    colaborators,
+    setColaborators,
     weekdays,
     toggleDay,
-    colaborators,
-    isDaySelected,
     colaboratorName,
     colaboratorTurn,
     colaboratorSunday,
@@ -93,9 +148,11 @@ export function useColaborators() {
     setColaboratorName,
     setColaboratorTurn,
     setColaboratorSunday,
+    setColaboratorWeekday,
     handleAddColaborator,
-    showColaboratorInput,
     handleRemoveColaborator,
+    showColaboratorInput,
     setShowColaboratorInput,
+    isDaySelected,
   };
 }
