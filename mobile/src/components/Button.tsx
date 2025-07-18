@@ -36,6 +36,7 @@ export function Button({
         className={clsx("text-white text-base font-archivo_700", {
           ["text-black"]: isChange,
           ["font-archivo_600"]: isDark,
+          ["text-[#c6c6cc]"]: isDark,
         })}
       >
         {title}

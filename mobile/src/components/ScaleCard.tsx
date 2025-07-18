@@ -10,14 +10,14 @@ interface ScaleCardProps extends TouchableOpacityProps {
   title: string;
   periodScale: string;
   colaborators: number;
-  deleteScale: () => void;
+  onRemove: () => Promise<void>;
 }
 
 export function ScaleCard({
   title,
   periodScale,
-  deleteScale,
   colaborators,
+  onRemove,
   ...rest
 }: ScaleCardProps) {
   return (
@@ -47,7 +47,7 @@ export function ScaleCard({
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={deleteScale}
+          onPress={onRemove}
           className="items-center h-12 w-12 rounded-xl justify-center"
         >
           <Feather name="trash-2" size={18} color="#fff" />

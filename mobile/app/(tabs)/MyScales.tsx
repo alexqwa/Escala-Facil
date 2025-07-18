@@ -1,12 +1,13 @@
-import { useCallback } from "react";
-import { router } from "expo-router";
-import { View, FlatList, Text } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
+import { View, Text, FlatList } from "react-native";
+
+import { useScale } from "@/src/hooks/useScale";
 
 import { Header } from "@/src/components/Header";
 import { ScaleCard } from "@/src/components/ScaleCard";
 
 export default function MyScales() {
+  const { scales, handleRemoveScale } = useScale();
+
   return (
     <View className="flex-1 bg-[#121214] items-center">
       <Header title="MINHAS ESCALAS" />
@@ -15,28 +16,22 @@ export default function MyScales() {
           Minhas escalas
         </Text>
         <View className="space-y-6">
-          {/* <FlatList
+          <FlatList
             data={scales}
             scrollEnabled={false}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => {
               return (
                 <ScaleCard
-                  onPress={() =>
-                    router.replace({
-                      pathname: "/editables/[id]",
-                      params: { id: item.id, editing: JSON.stringify(true) },
-                    })
-                  }
                   title={item.title}
-                  period={item.periodScale}
+                  periodScale={item.periodScale}
                   colaborators={item.colaborators.length}
-                  deleteScale={() => deleteScale(item.id)}
+                  onRemove={async () => handleRemoveScale(item.id, item.title)}
                 />
               );
             }}
-          /> */}
+          />
         </View>
       </View>
     </View>

@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { Feather } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import {
@@ -17,6 +16,7 @@ import { useScaleAndColaborators } from "@/src/hooks/useScaleAndColaborators";
 import { Day } from "@/src/components/Day";
 import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
+import { Button } from "@/src/components/Button";
 import { ColaboratorItem } from "@/src/components/ColaboratorItem";
 
 export default function EditablePage() {
@@ -82,9 +82,14 @@ export default function EditablePage() {
                 <Text className="block text-sm font-archivo_700 text-white ml-2">
                   Colaboradores
                 </Text>
-                <Text className="block text-sm font-archivo_700 text-white mr-2">
-                  Turno
-                </Text>
+                <View className="flex-row space-x-2">
+                  <Text className="block text-sm font-archivo_700 text-white mr-2">
+                    Domingo
+                  </Text>
+                  <Text className="block text-sm font-archivo_700 text-white mr-2">
+                    Turno
+                  </Text>
+                </View>
               </View>
               <FlatList
                 data={colaborators}
@@ -158,39 +163,24 @@ export default function EditablePage() {
                   </View>
                 </View>
               ) : (
-                <TouchableOpacity
-                  activeOpacity={0.7}
+                <Button
+                  isDark
+                  title="Adicionar colaborador"
                   onPress={() => setShowColaboratorInput(true)}
-                  className="w-full bg-[#202024] flex-row space-x-3 h-14 rounded-xl items-center justify-center text-[#E1E1E6] font-archivo_600"
                 >
                   <Feather name="plus-circle" size={18} color="#c6c6cc" />
-                  <Text className="text-[#c6c6cc] font-archivo_600 text-base">
-                    Adicionar colaborador
-                  </Text>
-                </TouchableOpacity>
+                </Button>
               )}
             </View>
           </View>
 
           <View className="bg-[#202024] h-[1px] my-6 w-[80%] self-center" />
-          <TouchableOpacity
+          <Button
+            title="GERAR ESCALA"
             onPress={handleSubmit}
-            activeOpacity={0.7}
-            className={clsx(
-              "bg-green-500 h-14 rounded-xl items-center justify-center",
-              {
-                ["bg-[#F7DD43]"]: Boolean(editing),
-              }
-            )}
-          >
-            <Text
-              className={clsx("text-white text-base font-archivo_700", {
-                ["text-black"]: Boolean(editing),
-              })}
-            >
-              {Boolean(editing) ? "Salvar alterações" : "Salvar informações"}
-            </Text>
-          </TouchableOpacity>
+            disabled={!title || !month || colaborators.length === 0}
+            isInactive={!title || !month || colaborators.length === 0}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
