@@ -72,6 +72,31 @@ export async function scaleRoutes(app: FastifyInstance) {
     }
   });
 
+  app.get('/scales/:id', async (request, reply) => {
+    const scaleParams = z.object({
+      id: z.string(),
+    });
+
+    try {
+      const { id } = scaleParams.parse(request.params);
+      const scale = await prisma.scale.findUnique({
+        where: {
+          id: parseInt(id),
+        },
+        include: {
+          colaborators: {
+            include: {
+              weekday: true,
+            },
+          },
+        },
+      });
+      reply.status(200).send(scale);
+    } catch (error) {
+      reply.status(500).send({ error: 'Erro ao buscar a Scale' });
+    }
+  });
+
   app.delete('/scales/:id', async (request, reply) => {
     const scaleParams = z.object({
       id: z.string(),
