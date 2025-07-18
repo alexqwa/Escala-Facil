@@ -1,6 +1,11 @@
 import clsx from "clsx";
 import { ReactNode } from "react";
-import { TouchableOpacity, TouchableOpacityProps, Text } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  TouchableOpacityProps,
+} from "react-native";
 
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
@@ -8,14 +13,16 @@ interface ButtonProps extends TouchableOpacityProps {
   isChange?: boolean;
   isInactive?: boolean;
   children?: ReactNode;
+  isLoading: boolean;
 }
 
 export function Button({
   title,
   isDark,
   isChange,
-  isInactive,
   children,
+  isLoading,
+  isInactive,
   ...rest
 }: ButtonProps) {
   return (
@@ -32,15 +39,19 @@ export function Button({
       )}
     >
       {children}
-      <Text
-        className={clsx("text-white text-base font-archivo_700", {
-          ["text-black"]: isChange,
-          ["font-archivo_600"]: isDark,
-          ["text-[#c6c6cc]"]: isDark,
-        })}
-      >
-        {title}
-      </Text>
+      {isLoading ? (
+        <ActivityIndicator size="small" color="#FFf" />
+      ) : (
+        <Text
+          className={clsx("text-white text-base font-archivo_700", {
+            ["text-black"]: isChange,
+            ["font-archivo_600"]: isDark,
+            ["text-[#c6c6cc]"]: isDark,
+          })}
+        >
+          {title}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 }

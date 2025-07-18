@@ -25,6 +25,7 @@ export default function EditablePage() {
   const {
     title,
     month,
+    loading,
     setTitle,
     setMonth,
     weekdays,
@@ -165,6 +166,7 @@ export default function EditablePage() {
               ) : (
                 <Button
                   isDark
+                  isLoading={false}
                   title="Adicionar colaborador"
                   onPress={() => setShowColaboratorInput(true)}
                 >
@@ -176,10 +178,13 @@ export default function EditablePage() {
 
           <View className="bg-[#202024] h-[1px] my-6 w-[80%] self-center" />
           <Button
+            isLoading={loading}
             title="GERAR ESCALA"
             onPress={handleSubmit}
-            disabled={!title || !month || colaborators.length === 0}
-            isInactive={!title || !month || colaborators.length === 0}
+            disabled={!title || !month || colaborators.length === 0 || loading}
+            isInactive={
+              !title || !month || colaborators.length === 0 || loading
+            }
           />
         </ScrollView>
       </KeyboardAvoidingView>

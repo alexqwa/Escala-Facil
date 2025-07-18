@@ -29,6 +29,7 @@ export function useScaleAndColaborators(id: string, dateMonth: string) {
   const [colaboratorSunday, setColaboratorSunday] = useState(0);
   const [colaboratorWeekday, setColaboratorWeekday] = useState<number[]>([]);
   const [showColaboratorInput, setShowColaboratorInput] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const monthPair = useMonthPair(Number(month));
@@ -40,6 +41,7 @@ export function useScaleAndColaborators(id: string, dateMonth: string) {
       Alert.alert("Erro", "Todos os campos são obrigatórios.");
       return;
     }
+    setLoading(true);
 
     const scaleData: Scale = {
       title,
@@ -56,6 +58,8 @@ export function useScaleAndColaborators(id: string, dateMonth: string) {
     } catch (error) {
       console.error(error);
       Alert.alert("Erro", "Erro ao gerar sua escala!");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -84,7 +88,7 @@ export function useScaleAndColaborators(id: string, dateMonth: string) {
   function handleRemoveColaborator(name: string) {
     Alert.alert(
       "Remover colaborador",
-      `Você tem certeza que deseja remover ${name}`,
+      `Você tem certeza que deseja remover ${name}?`,
       [
         {
           text: "Cancelar",
@@ -154,5 +158,6 @@ export function useScaleAndColaborators(id: string, dateMonth: string) {
     showColaboratorInput,
     setShowColaboratorInput,
     isDaySelected,
+    loading,
   };
 }
