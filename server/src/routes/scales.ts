@@ -18,18 +18,21 @@ export async function scaleRoutes(app: FastifyInstance) {
 
     const scaleSchema = z.object({
       title: z.string().min(1, 'Nome é obrigatório.'),
+      month: z.number().min(1, 'Mês é obrigatório.'),
+      year: z.number().min(1, 'Ano é obrigatório.'),
       periodScale: z.string().min(1, 'Período da escala é obrigatório.'),
       colaborators: z.array(colaboratorSchema),
     });
 
     try {
-      const { title, periodScale, colaborators } = scaleSchema.parse(
-        request.body
-      );
+      const { title, month, year, periodScale, colaborators } =
+        scaleSchema.parse(request.body);
 
       const scale = await prisma.scale.create({
         data: {
           title,
+          month,
+          year,
           periodScale,
           colaborators: {
             create: colaborators.map((colaborator) => ({
@@ -110,7 +113,7 @@ export async function scaleRoutes(app: FastifyInstance) {
           id: parseInt(id),
         },
       });
-      reply.status(200).send('Escala deletada com sucesso!');
+      reply.status(200).send(scale);
     } catch (error) {
       reply.status(500).send({ error: 'Erro ao deletar a Scale' });
     }

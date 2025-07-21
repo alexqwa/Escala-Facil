@@ -13,7 +13,7 @@ interface ButtonProps extends TouchableOpacityProps {
   isChange?: boolean;
   isInactive?: boolean;
   children?: ReactNode;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 export function Button({

@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Weekday {
-  id            Int          @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   day           Int
   Colaborator   Colaborator @relation(fields: [colaboratorId], references: [id], onDelete: Cascade)
   colaboratorId Int
@@ -25,6 +25,8 @@ model Weekday {
 model Scale {
   id           Int           @id @default(autoincrement())
   title        String
+  month        Int
+  year         Int
   periodScale  String
   colaborators Colaborator[]
 

@@ -19,13 +19,15 @@ import { Header } from "@/src/components/Header";
 import { Button } from "@/src/components/Button";
 import { ColaboratorItem } from "@/src/components/ColaboratorItem";
 
-export default function EditablePage() {
-  const { id, dateMonth, dateYear, editing } = useLocalSearchParams();
+export default function Scale() {
+  const { id, monthParams, yearParams, edit } = useLocalSearchParams();
 
   const {
+    year,
     title,
     month,
     loading,
+    setYear,
     setTitle,
     setMonth,
     weekdays,
@@ -44,13 +46,19 @@ export default function EditablePage() {
     showColaboratorInput,
     handleRemoveColaborator,
     setShowColaboratorInput,
-  } = useScaleAndColaborators(id.toString(), dateMonth.toString());
+  } = useScaleAndColaborators(
+    id.toString(),
+    Number(monthParams),
+    Number(yearParams)
+  );
+
+  const isDisabled = !title || !month || colaborators.length === 0 || loading;
 
   return (
     <View className="flex-1 items-center bg-[#121214]">
       <Header
-        back={Boolean(!editing)}
-        title={Boolean(editing) ? "EDITAR ESCALA" : "GERAR ESCALA"}
+        back={Boolean(!edit)}
+        title={Boolean(edit) ? "EDITAR ESCALA" : "GERAR ESCALA"}
       />
       <KeyboardAvoidingView
         className="max-w-[85%] w-full flex-1"
@@ -63,10 +71,11 @@ export default function EditablePage() {
           <View className="space-y-4">
             <Form
               title={title}
+              year={year.toString()}
               month={month.toString()}
-              year={dateYear.toString()}
               onChangeTitle={setTitle}
-              onChangeMonth={setMonth}
+              onChangeMonth={(text) => setMonth(Number(text))}
+              onChangeYear={(text) => setYear(Number(text))}
             />
             <View className="space-y-2">
               <Text className="block text-sm font-archivo_700 text-white ml-2">
@@ -79,18 +88,10 @@ export default function EditablePage() {
               </View>
             </View>
             <View>
-              <View className="flex-row justify-between mb-2">
+              <View className="mb-2">
                 <Text className="block text-sm font-archivo_700 text-white ml-2">
                   Colaboradores
                 </Text>
-                <View className="flex-row space-x-2">
-                  <Text className="block text-sm font-archivo_700 text-white mr-2">
-                    Domingo
-                  </Text>
-                  <Text className="block text-sm font-archivo_700 text-white mr-2">
-                    Turno
-                  </Text>
-                </View>
               </View>
               <FlatList
                 data={colaborators}
@@ -127,10 +128,10 @@ export default function EditablePage() {
                           setColaboratorSunday(Number(text))
                         }
                         className="text-white w-full text-center font-archivo_600 text-base flex-1"
-                        placeholder="0"
                         placeholderTextColor="#e1e1e5"
-                        cursorColor="#fff"
                         keyboardType="number-pad"
+                        cursorColor="#fff"
+                        maxLength={2}
                       />
                     </View>
                     <TouchableOpacity
@@ -180,11 +181,9 @@ export default function EditablePage() {
           <Button
             isLoading={loading}
             title="GERAR ESCALA"
+            disabled={isDisabled}
             onPress={handleSubmit}
-            disabled={!title || !month || colaborators.length === 0 || loading}
-            isInactive={
-              !title || !month || colaborators.length === 0 || loading
-            }
+            isInactive={isDisabled}
           />
         </ScrollView>
       </KeyboardAvoidingView>

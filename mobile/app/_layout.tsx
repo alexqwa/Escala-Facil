@@ -57,6 +57,7 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="creation/Scale" />
         <StatusBar translucent style="light" />
       </Stack>
     </View>

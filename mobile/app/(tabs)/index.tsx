@@ -36,8 +36,8 @@ export default function Home() {
           isInactive={!title || !month || !year}
           onPress={() =>
             router.push({
-              pathname: "/editables/[id]",
-              params: { id: title, dateMonth: month, dateYear: year },
+              pathname: "/creation/Scale",
+              params: { id: title, monthParams: month, yearParams: year },
             })
           }
         />

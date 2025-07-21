@@ -8,6 +8,8 @@ import { useMonthPair } from "@/src/hooks/useMonthPair";
 
 interface Scale {
   title: string;
+  month: number;
+  year: number;
   periodScale: string;
   colaborators: Colaborator[];
 }
@@ -19,9 +21,14 @@ interface Colaborator {
   weekday: number[];
 }
 
-export function useScaleAndColaborators(id: string, dateMonth: string) {
+export function useScaleAndColaborators(
+  id: string,
+  monthParams: number,
+  yearParams: number
+) {
   const [title, setTitle] = useState(id);
-  const [month, setMonth] = useState(dateMonth);
+  const [month, setMonth] = useState(monthParams);
+  const [year, setYear] = useState(yearParams);
   const [periodScale, setPeriodScale] = useState("");
   const [colaborators, setColaborators] = useState<Colaborator[]>([]);
   const [colaboratorName, setColaboratorName] = useState("");
@@ -45,6 +52,8 @@ export function useScaleAndColaborators(id: string, dateMonth: string) {
 
     const scaleData: Scale = {
       title,
+      month,
+      year,
       periodScale,
       colaborators,
     };
@@ -65,6 +74,8 @@ export function useScaleAndColaborators(id: string, dateMonth: string) {
 
   function resetInputs() {
     setTitle("");
+    setMonth(0);
+    setYear(0);
     setPeriodScale("");
     setColaborators([]);
   }
@@ -139,6 +150,8 @@ export function useScaleAndColaborators(id: string, dateMonth: string) {
     setTitle,
     month,
     setMonth,
+    year,
+    setYear,
     periodScale,
     handleSubmit,
     colaborators,
