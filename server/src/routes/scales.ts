@@ -61,15 +61,9 @@ export async function scaleRoutes(app: FastifyInstance) {
   app.get('/scales', async (request, reply) => {
     try {
       const scales = await prisma.scale.findMany({
-        select: {
-          id: true,
-          title: true,
-          month: true,
-          year: true,
-          periodScale: true,
+        include: {
           colaborators: {
-            select: {
-              name: true,
+            include: {
               weekday: true,
             },
           },
