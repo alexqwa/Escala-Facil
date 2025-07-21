@@ -66,6 +66,7 @@ export async function scaleRoutes(app: FastifyInstance) {
           title: true,
           month: true,
           year: true,
+          periodScale: true,
           colaborators: {
             select: {
               name: true,
