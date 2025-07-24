@@ -10,7 +10,9 @@ import { Button } from "@/src/components/Button";
 export default function Home() {
   const [title, setTitle] = useState("");
   const [year, setYear] = useState(dayjs().format("YYYY"));
-  const [month, setMonth] = useState(dayjs().month().toString());
+  const [month, setMonth] = useState(String(dayjs().month()));
+
+  const isDisabled = !title || !month || !year;
 
   return (
     <View className="flex-1 items-center bg-[#121214]">
@@ -32,18 +34,22 @@ export default function Home() {
         <Button
           isChange
           title="GERAR ESCALA"
-          disabled={!title || !month || !year}
-          isInactive={!title || !month || !year}
+          disabled={isDisabled}
+          isInactive={isDisabled}
           onPress={() =>
             router.push({
               pathname: "/creation/Scale",
-              params: { id: title, monthParams: month, yearParams: year },
+              params: {
+                titleParams: title,
+                monthParams: month,
+                yearParams: year,
+              },
             })
           }
         />
         <Text className="text-[#c4c4cc] font-poppins_400 text-sm mt-6 text-center">
           Após gerar sua escala, você será redirecionado{"\n"}para tela onde
-          você poderá edita-la.{"\n"}Feito por Alexandre ❤️
+          você poderá edita-la.
         </Text>
       </View>
     </View>

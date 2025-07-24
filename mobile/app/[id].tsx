@@ -1,175 +1,191 @@
-// import { Feather } from "@expo/vector-icons";
-// import { useLocalSearchParams } from "expo-router";
-// import {
-//   Text,
-//   View,
-//   Platform,
-//   FlatList,
-//   TextInput,
-//   ScrollView,
-//   TouchableOpacity,
-//   KeyboardAvoidingView,
-// } from "react-native";
+import { useEffect } from "react";
+import { Feather } from "@expo/vector-icons";
+import { useLocalSearchParams } from "expo-router";
+import {
+  Text,
+  View,
+  Platform,
+  FlatList,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+} from "react-native";
 
-// import { useScaleById } from "@/src/hooks/useScaleById";
+import { useScaleAndColaborators } from "@/src/hooks/useScaleAndColaborators";
 
-// import { Day } from "@/src/components/Day";
-// import { Form } from "@/src/components/Form";
-// import { Header } from "@/src/components/Header";
-// import { Button } from "@/src/components/Button";
-// import { ColaboratorItem } from "@/src/components/ColaboratorItem";
+import { Day } from "@/src/components/Day";
+import { Form } from "@/src/components/Form";
+import { Header } from "@/src/components/Header";
+import { Button } from "@/src/components/Button";
+import { ColaboratorItem } from "@/src/components/ColaboratorItem";
 
-// export default function EditablePage() {
-//   const { id, edit } = useLocalSearchParams();
+export default function EditablePage() {
+  const { id } = useLocalSearchParams();
+  const {
+    year,
+    title,
+    month,
+    setYear,
+    weekdays,
+    setMonth,
+    setTitle,
+    toggleDay,
+    periodScale,
+    handleSubmit,
+    colaborators,
+    isDaySelected,
+    fetchScaleById,
+    colaboratorName,
+    colaboratorTurn,
+    colaboratorSunday,
+    setColaboratorName,
+    setColaboratorTurn,
+    showColaboratorInput,
+    setColaboratorSunday,
+    handleAddColaborator,
+    setShowColaboratorInput,
+    handleRemoveColaborator,
+  } = useScaleAndColaborators("", 0, 0);
 
-//   const {
-//     title,
-//     month,
-//     setTitle,
-//     setMonth,
-//     weekdays,
-//     toggleDay,
-//     periodScale,
-//     colaborators,
-//     isDaySelected,
-//     colaboratorName,
-//     colaboratorTurn,
-//     colaboratorSunday,
-//     setColaboratorTurn,
-//     setColaboratorName,
-//     setColaboratorSunday,
-//     handleAddColaborator,
-//     showColaboratorInput,
-//     handleRemoveColaborator,
-//     setShowColaboratorInput,
-//   } = useScaleById(id.toString());
+  useEffect(() => {
+    fetchScaleById(Number(id));
+  }, [id]);
 
-//   return (
-//     <View className="flex-1 items-center bg-[#121214]">
-//       <Header
-//         back={Boolean(!edit)}
-//         title={Boolean(edit) ? "EDITAR ESCALA" : "GERAR ESCALA"}
-//       />
-//       <KeyboardAvoidingView
-//         className="max-w-[85%] w-full flex-1"
-//         behavior={Platform.OS === "ios" ? "position" : "padding"}
-//       >
-//         <ScrollView
-//           showsVerticalScrollIndicator={false}
-//           contentContainerStyle={{ paddingTop: 60, paddingBottom: 100 }}
-//         >
-//           <View className="space-y-4">
-//             <Form
-//               title={title}
-//               month={month}
-//               year="2025"
-//               onChangeTitle={setTitle}
-//               onChangeMonth={setMonth}
-//             />
-//             <View className="space-y-2">
-//               <Text className="block text-sm font-archivo_700 text-white ml-2">
-//                 Período da escala
-//               </Text>
-//               <View className="w-full bg-[#202024] h-14 rounded-xl px-4 justify-center">
-//                 <Text className="text-[#E1E1E6] font-archivo_600 text-base">
-//                   {periodScale}
-//                 </Text>
-//               </View>
-//             </View>
-//             <View>
-//               <View className="mb-2">
-//                 <Text className="block text-sm font-archivo_700 text-white ml-2">
-//                   Colaboradores
-//                 </Text>
-//               </View>
-//               <FlatList
-//                 data={colaborators}
-//                 scrollEnabled={false}
-//                 keyExtractor={(item) => item.name}
-//                 renderItem={({ item }) => {
-//                   return (
-//                     <ColaboratorItem
-//                       name={item.name}
-//                       turn={item.turn}
-//                       sunday={item.sunday}
-//                       selectedDays={item.weekday}
-//                       onRemove={() => handleRemoveColaborator(item.name)}
-//                     />
-//                   );
-//                 }}
-//               />
-//               {showColaboratorInput ? (
-//                 <View className="w-full overflow-hidden rounded-xl mb-2 bg-[#202024] divide-y-[1px] divide-[#323238] border border-[#323238]">
-//                   <View className="h-14 flex-row flex-1 divide-x-[1px] divide-[#323238]">
-//                     <TextInput
-//                       autoFocus
-//                       value={colaboratorName}
-//                       onChangeText={setColaboratorName}
-//                       className="flex-1 px-4 text-white font-archivo_600 text-base"
-//                       placeholder="Nome do colaborador"
-//                       placeholderTextColor="#E1E1E6"
-//                       cursorColor="#fff"
-//                     />
-//                     <View className="w-14 items-center justify-center">
-//                       <TextInput
-//                         value={colaboratorSunday.toString()}
-//                         onChangeText={(text) =>
-//                           setColaboratorSunday(Number(text))
-//                         }
-//                         className="text-white w-full text-center font-archivo_600 text-base flex-1"
-//                         placeholderTextColor="#e1e1e5"
-//                         keyboardType="number-pad"
-//                         cursorColor="#fff"
-//                         maxLength={2}
-//                       />
-//                     </View>
-//                     <TouchableOpacity
-//                       activeOpacity={0.7}
-//                       className="w-12 items-center justify-center"
-//                       onPress={() => setColaboratorTurn(!colaboratorTurn)}
-//                     >
-//                       <Feather
-//                         name={colaboratorTurn ? "sun" : "moon"}
-//                         size={18}
-//                         color="#fff"
-//                       />
-//                     </TouchableOpacity>
-//                     <TouchableOpacity
-//                       activeOpacity={0.7}
-//                       onPress={handleAddColaborator}
-//                       className="w-12 items-center justify-center"
-//                     >
-//                       <Feather name="plus" size={18} color="#fff" />
-//                     </TouchableOpacity>
-//                   </View>
-//                   <View className="p-4 flex-row justify-between">
-//                     {weekdays.map(({ day, initial }) => (
-//                       <Day
-//                         key={day}
-//                         day={initial}
-//                         isActive={isDaySelected(day)}
-//                         onPress={() => toggleDay(day)}
-//                       />
-//                     ))}
-//                   </View>
-//                 </View>
-//               ) : (
-//                 <Button
-//                   isDark
-//                   isLoading={false}
-//                   title="Adicionar colaborador"
-//                   onPress={() => setShowColaboratorInput(true)}
-//                 >
-//                   <Feather name="plus-circle" size={18} color="#c6c6cc" />
-//                 </Button>
-//               )}
-//             </View>
-//           </View>
+  console.log(weekdays.map((day) => isDaySelected(day.day)));
 
-//           <View className="bg-[#202024] h-[1px] my-6 w-[80%] self-center" />
-//           <Button title="GERAR ESCALA" />
-//         </ScrollView>
-//       </KeyboardAvoidingView>
-//     </View>
-//   );
-// }
+  const isDisabled = !title || !month || colaborators.length === 0;
+
+  return (
+    <View className="flex-1 items-center bg-[#121214]">
+      <Header back title="EDITAR ESCALA" />
+      <KeyboardAvoidingView
+        className="max-w-[85%] w-full flex-1"
+        behavior={Platform.OS === "ios" ? "position" : "padding"}
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: 60, paddingBottom: 100 }}
+        >
+          <View className="space-y-4">
+            <Form
+              title={title}
+              month={month.toString()}
+              year={year.toString()}
+              onChangeTitle={setTitle}
+              onChangeMonth={(text) => setMonth(Number(text))}
+              onChangeYear={(text) => setYear(Number(text))}
+            />
+            <View className="space-y-2">
+              <Text className="block text-sm font-archivo_700 text-white ml-2">
+                Período da escala
+              </Text>
+              <View className="w-full bg-[#202024] h-14 rounded-xl px-4 justify-center">
+                <Text className="text-[#E1E1E6] font-archivo_600 text-base">
+                  {periodScale}
+                </Text>
+              </View>
+            </View>
+            <View>
+              <View className="mb-2">
+                <Text className="block text-sm font-archivo_700 text-white ml-2">
+                  Colaboradores
+                </Text>
+              </View>
+              <FlatList
+                data={colaborators}
+                scrollEnabled={false}
+                keyExtractor={(item) => item.name}
+                renderItem={({ item }) => {
+                  return (
+                    <ColaboratorItem
+                      name={item.name}
+                      turn={item.turn}
+                      sunday={item.sunday}
+                      selectedDays={item.weekday}
+                      onRemove={() => handleRemoveColaborator(item.name)}
+                    />
+                  );
+                }}
+              />
+              {showColaboratorInput ? (
+                <View className="w-full overflow-hidden rounded-xl mb-2 bg-[#202024] divide-y-[1px] divide-[#323238] border border-[#323238]">
+                  <View className="h-14 flex-row flex-1 divide-x-[1px] divide-[#323238]">
+                    <TextInput
+                      autoFocus
+                      value={colaboratorName}
+                      onChangeText={setColaboratorName}
+                      className="flex-1 px-4 text-white font-archivo_600 text-base"
+                      placeholder="Nome do colaborador"
+                      placeholderTextColor="#E1E1E6"
+                      cursorColor="#fff"
+                    />
+                    <View className="w-14 items-center justify-center">
+                      <TextInput
+                        value={colaboratorSunday.toString()}
+                        onChangeText={(text) =>
+                          setColaboratorSunday(Number(text))
+                        }
+                        className="text-white w-full text-center font-archivo_600 text-base flex-1"
+                        placeholderTextColor="#e1e1e5"
+                        keyboardType="number-pad"
+                        cursorColor="#fff"
+                        maxLength={2}
+                      />
+                    </View>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      className="w-12 items-center justify-center"
+                      onPress={() => setColaboratorTurn(!colaboratorTurn)}
+                    >
+                      <Feather
+                        name={colaboratorTurn ? "sun" : "moon"}
+                        size={18}
+                        color="#fff"
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={handleAddColaborator}
+                      className="w-12 items-center justify-center"
+                    >
+                      <Feather name="plus" size={18} color="#fff" />
+                    </TouchableOpacity>
+                  </View>
+                  <View className="p-4 flex-row justify-between">
+                    {weekdays.map(({ day, initial }) => (
+                      <Day
+                        key={day}
+                        day={initial}
+                        isActive={isDaySelected(day)}
+                        onPress={() => toggleDay(day)}
+                      />
+                    ))}
+                  </View>
+                </View>
+              ) : (
+                <Button
+                  isDark
+                  isLoading={false}
+                  title="Adicionar colaborador"
+                  onPress={() => setShowColaboratorInput(true)}
+                >
+                  <Feather name="plus-circle" size={18} color="#c6c6cc" />
+                </Button>
+              )}
+            </View>
+          </View>
+
+          <View className="bg-[#202024] h-[1px] my-6 w-[80%] self-center" />
+          <Button
+            title="SALVAR ALTERAÇÕES"
+            isChange
+            disabled={isDisabled}
+            onPress={handleSubmit}
+            isInactive={isDisabled}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
+  );
+}

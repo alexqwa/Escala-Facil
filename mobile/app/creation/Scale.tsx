@@ -20,12 +20,12 @@ import { Button } from "@/src/components/Button";
 import { ColaboratorItem } from "@/src/components/ColaboratorItem";
 
 export default function Scale() {
-  const { id, monthParams, yearParams, edit } = useLocalSearchParams();
+  const { titleParams, monthParams, yearParams } = useLocalSearchParams();
 
   const {
-    year,
     title,
     month,
+    year,
     loading,
     setYear,
     setTitle,
@@ -47,7 +47,7 @@ export default function Scale() {
     handleRemoveColaborator,
     setShowColaboratorInput,
   } = useScaleAndColaborators(
-    id.toString(),
+    titleParams.toString(),
     Number(monthParams),
     Number(yearParams)
   );
@@ -56,10 +56,7 @@ export default function Scale() {
 
   return (
     <View className="flex-1 items-center bg-[#121214]">
-      <Header
-        back={Boolean(!edit)}
-        title={Boolean(edit) ? "EDITAR ESCALA" : "GERAR ESCALA"}
-      />
+      <Header back={true} title="GERAR ESCALA" />
       <KeyboardAvoidingView
         className="max-w-[85%] w-full flex-1"
         behavior={Platform.OS === "ios" ? "position" : "padding"}

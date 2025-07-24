@@ -4,9 +4,11 @@ import { router } from "expo-router";
 import { useEffect, useState } from "react";
 
 import { api } from "@/src/lib/axios";
+
 import { useMonthPair } from "@/src/hooks/useMonthPair";
 
 interface Scale {
+  id: number;
   title: string;
   month: number;
   year: number;
@@ -22,24 +24,27 @@ interface Colaborator {
 }
 
 export function useScaleAndColaborators(
-  id: string,
+  titleParams: string,
   monthParams: number,
   yearParams: number
 ) {
-  const [title, setTitle] = useState(id);
-  const [month, setMonth] = useState(monthParams);
+  // Estados para as escalas
   const [year, setYear] = useState(yearParams);
+  const [title, setTitle] = useState(titleParams);
+  const [month, setMonth] = useState(monthParams);
   const [periodScale, setPeriodScale] = useState("");
   const [colaborators, setColaborators] = useState<Colaborator[]>([]);
+
+  // Estados para os colaboradores
   const [colaboratorName, setColaboratorName] = useState("");
   const [colaboratorTurn, setColaboratorTurn] = useState(true);
   const [colaboratorSunday, setColaboratorSunday] = useState(0);
-  const [colaboratorWeekday, setColaboratorWeekday] = useState<number[]>([]);
   const [showColaboratorInput, setShowColaboratorInput] = useState(false);
+  const [colaboratorWeekday, setColaboratorWeekday] = useState<number[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const monthPair = useMonthPair(Number(month));
+    const monthPair = useMonthPair(month);
     setPeriodScale(monthPair);
   }, [month]);
 
@@ -51,6 +56,7 @@ export function useScaleAndColaborators(
     setLoading(true);
 
     const scaleData: Scale = {
+      id: 0,
       title,
       month,
       year,
@@ -67,6 +73,25 @@ export function useScaleAndColaborators(
     } catch (error) {
       console.error(error);
       Alert.alert("Erro", "Erro ao gerar sua escala!");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function fetchScaleById(scaleId: number) {
+    setLoading(true);
+    try {
+      const response = await api.get(`/scales/${scaleId}`);
+      const scaleData = response.data;
+      // Atualiza os estados com os dados da escala recuperada
+      setTitle(scaleData.title);
+      setMonth(scaleData.month);
+      setYear(scaleData.year);
+      setPeriodScale(scaleData.periodScale);
+      setColaborators(scaleData.colaborators);
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Erro", "Erro ao recuperar os dados da escala!");
     } finally {
       setLoading(false);
     }
@@ -170,6 +195,7 @@ export function useScaleAndColaborators(
     handleRemoveColaborator,
     showColaboratorInput,
     setShowColaboratorInput,
+    fetchScaleById,
     isDaySelected,
     loading,
   };

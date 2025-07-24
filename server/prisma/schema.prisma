@@ -13,20 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Weekday {
-  id            Int         @id @default(autoincrement())
-  day           Int
-  Colaborator   Colaborator @relation(fields: [colaboratorId], references: [id], onDelete: Cascade)
-  colaboratorId Int
-
-  @@map("weekdays")
-}
-
 model Scale {
   id           Int           @id @default(autoincrement())
   title        String
-  month        Int
-  year         Int
+  month        String
+  year         String
   periodScale  String
   colaborators Colaborator[]
 
@@ -34,13 +25,13 @@ model Scale {
 }
 
 model Colaborator {
-  id      Int       @id @default(autoincrement())
+  id      Int     @id @default(autoincrement())
   name    String
   turn    Boolean
   sunday  Int
+  weekday Int[]
   scaleId Int
-  scale   Scale     @relation(fields: [scaleId], references: [id], onDelete: Cascade)
-  weekday Weekday[]
+  scale   Scale   @relation(fields: [scaleId], references: [id], onDelete: Cascade)
 
   @@map("colaborators")
 }

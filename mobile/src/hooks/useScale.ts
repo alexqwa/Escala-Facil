@@ -6,6 +6,8 @@ import { api } from "../lib/axios";
 interface Scale {
   id: number;
   title: string;
+  month: number;
+  year: number;
   periodScale: string;
   colaborators: Colaborator[];
 }

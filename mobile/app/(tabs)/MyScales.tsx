@@ -39,10 +39,7 @@ export default function MyScales() {
                     onPress={() =>
                       router.push({
                         pathname: "/[id]",
-                        params: {
-                          id: item.id.toString(),
-                          edit: "true",
-                        },
+                        params: { id: item.id },
                       })
                     }
                     onRemove={async () =>
