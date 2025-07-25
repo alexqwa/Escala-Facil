@@ -26,7 +26,7 @@ export function Form({
         <TextInput
           value={title}
           onChangeText={onChangeTitle}
-          className="input-custom w-full bg-[#202024] h-14 rounded-xl px-4 border-2 border-[#202024] text-white text-base font-archivo_600 focus:border-2 focus:border-[#323238] transition-all delay-300"
+          className="input-custom w-full uppercase bg-[#202024] h-14 rounded-xl px-4 border-2 border-[#202024] text-white text-base font-archivo_600 focus:border-2 focus:border-[#323238] transition-all delay-300"
           placeholder="Nome da escala"
           placeholderTextColor="#E1E1E6"
           cursorColor="#fff"

@@ -65,6 +65,35 @@ export function useScales(
     }
   }
 
+  async function handleUpdate(id: number) {
+    if (!title.trim() || !periodScale.trim() || colaborators.length === 0) {
+      Alert.alert("Erro", "Todos os campos são obrigatórios.");
+      return;
+    }
+    setLoading(true);
+
+    const scaleData: Omit<Scale, "id"> = {
+      title,
+      month,
+      year,
+      periodScale,
+      colaborators,
+    };
+
+    try {
+      const response = await api.put(`/edit/${id}`, scaleData);
+      Alert.alert("Sucesso", "Escala atualizada com sucesso.");
+      console.log(response.data);
+      resetInputs();
+      router.replace("/(tabs)/MyScales");
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Erro", "Erro ao atualizar sua escala!");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function handleSubmit() {
     if (!title.trim() || !periodScale.trim() || colaborators.length === 0) {
       Alert.alert("Erro", "Todos os campos são obrigatórios.");
@@ -72,8 +101,7 @@ export function useScales(
     }
     setLoading(true);
 
-    const scaleData: Scale = {
-      id: 0,
+    const scaleData: Omit<Scale, "id"> = {
       title,
       month,
       year,
@@ -100,7 +128,6 @@ export function useScales(
     try {
       const response = await api.get(`/scales/${scaleId}`);
       const scaleData = response.data;
-      // Atualiza os estados com os dados da escala recuperada
       setTitle(scaleData.title);
       setMonth(scaleData.month);
       setYear(scaleData.year);
@@ -111,6 +138,7 @@ export function useScales(
       Alert.alert("Erro", "Erro ao recuperar os dados da escala!");
     } finally {
       setLoading(false);
+      setLoadingScale(false);
     }
   }
 
@@ -223,6 +251,7 @@ export function useScales(
   return {
     year,
     title,
+    error,
     month,
     scales,
     loading,
@@ -236,6 +265,7 @@ export function useScales(
     handleSubmit,
     colaborators,
     loadingScale,
+    handleUpdate,
     isDaySelected,
     fetchScaleById,
     setColaborators,
