@@ -1,13 +1,22 @@
+import { useEffect } from "react";
 import { router } from "expo-router";
 import { View, Text, FlatList, ActivityIndicator } from "react-native";
 
-import { useScale } from "@/src/hooks/useScale";
+import { useScales } from "@/src/hooks/useScales";
 
 import { Header } from "@/src/components/Header";
 import { ScaleCard } from "@/src/components/ScaleCard";
 
 export default function MyScales() {
-  const { scales, handleRemoveScale, loading } = useScale();
+  const { scales, fetchScales, handleRemoveScale, loadingScale } = useScales(
+    "",
+    "",
+    ""
+  );
+
+  useEffect(() => {
+    fetchScales();
+  }, []);
 
   return (
     <View className="flex-1 bg-[#121214] items-center">
@@ -17,7 +26,7 @@ export default function MyScales() {
           Minhas escalas
         </Text>
         <View className="space-y-6 flex-1">
-          {loading ? (
+          {loadingScale ? (
             <View className="my-auto items-center justify-center space-y-2">
               <ActivityIndicator size="small" color="#fff" />
               <Text className="text-white text-center text-base font-archivo_700 ">

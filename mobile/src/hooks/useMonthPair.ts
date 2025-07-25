@@ -4,9 +4,11 @@ interface MonthPairOptions {
   adjustForZeroIndex?: boolean;
 }
 
-export function useMonthPair(monthNumber: number, options?: MonthPairOptions) {
+export function useMonthPair(monthNumber: string, options?: MonthPairOptions) {
   const adjustedMonth =
-    options?.adjustForZeroIndex !== false ? monthNumber - 1 : monthNumber;
+    options?.adjustForZeroIndex !== false
+      ? Number(monthNumber) - 1
+      : Number(monthNumber);
 
   const currentMonth = dayjs()
     .month(adjustedMonth)

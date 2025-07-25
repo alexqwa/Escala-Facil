@@ -12,7 +12,7 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 
-import { useScaleAndColaborators } from "@/src/hooks/useScaleAndColaborators";
+import { useScales } from "@/src/hooks/useScales";
 
 import { Day } from "@/src/components/Day";
 import { Form } from "@/src/components/Form";
@@ -46,13 +46,11 @@ export default function EditablePage() {
     handleAddColaborator,
     setShowColaboratorInput,
     handleRemoveColaborator,
-  } = useScaleAndColaborators("", 0, 0);
+  } = useScales("", "", "");
 
   useEffect(() => {
     fetchScaleById(Number(id));
   }, [id]);
-
-  console.log(weekdays.map((day) => isDaySelected(day.day)));
 
   const isDisabled = !title || !month || colaborators.length === 0;
 
@@ -70,11 +68,11 @@ export default function EditablePage() {
           <View className="space-y-4">
             <Form
               title={title}
-              month={month.toString()}
-              year={year.toString()}
+              year={year.trim()}
+              month={month.trim()}
+              onChangeYear={setYear}
               onChangeTitle={setTitle}
-              onChangeMonth={(text) => setMonth(Number(text))}
-              onChangeYear={(text) => setYear(Number(text))}
+              onChangeMonth={setMonth}
             />
             <View className="space-y-2">
               <Text className="block text-sm font-archivo_700 text-white ml-2">

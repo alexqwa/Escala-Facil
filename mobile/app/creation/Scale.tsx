@@ -11,7 +11,7 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 
-import { useScaleAndColaborators } from "@/src/hooks/useScaleAndColaborators";
+import { useScales } from "@/src/hooks/useScales";
 
 import { Day } from "@/src/components/Day";
 import { Form } from "@/src/components/Form";
@@ -23,9 +23,9 @@ export default function Scale() {
   const { titleParams, monthParams, yearParams } = useLocalSearchParams();
 
   const {
+    year,
     title,
     month,
-    year,
     loading,
     setYear,
     setTitle,
@@ -46,10 +46,10 @@ export default function Scale() {
     showColaboratorInput,
     handleRemoveColaborator,
     setShowColaboratorInput,
-  } = useScaleAndColaborators(
+  } = useScales(
     titleParams.toString(),
-    Number(monthParams),
-    Number(yearParams)
+    monthParams.toString(),
+    yearParams.toString()
   );
 
   const isDisabled = !title || !month || colaborators.length === 0 || loading;
@@ -68,11 +68,11 @@ export default function Scale() {
           <View className="space-y-4">
             <Form
               title={title}
-              year={year.toString()}
-              month={month.toString()}
+              year={year.trim()}
+              month={month.trim()}
+              onChangeYear={setYear}
               onChangeTitle={setTitle}
-              onChangeMonth={(text) => setMonth(Number(text))}
-              onChangeYear={(text) => setYear(Number(text))}
+              onChangeMonth={setMonth}
             />
             <View className="space-y-2">
               <Text className="block text-sm font-archivo_700 text-white ml-2">

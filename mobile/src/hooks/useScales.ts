@@ -9,9 +9,9 @@ import { useMonthPair } from "@/src/hooks/useMonthPair";
 
 interface Scale {
   id: number;
+  year: string;
   title: string;
-  month: number;
-  year: number;
+  month: string;
   periodScale: string;
   colaborators: Colaborator[];
 }
@@ -23,11 +23,16 @@ interface Colaborator {
   weekday: number[];
 }
 
-export function useScaleAndColaborators(
+export function useScales(
   titleParams: string,
-  monthParams: number,
-  yearParams: number
+  monthParams: string,
+  yearParams: string
 ) {
+  // Estados para puxar dados das escalas
+  const [scales, setScales] = useState<Scale[]>([]);
+  const [loadingScale, setLoadingScale] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   // Estados para as escalas
   const [year, setYear] = useState(yearParams);
   const [title, setTitle] = useState(titleParams);
@@ -47,6 +52,18 @@ export function useScaleAndColaborators(
     const monthPair = useMonthPair(month);
     setPeriodScale(monthPair);
   }, [month]);
+
+  async function fetchScales() {
+    try {
+      const response = await api.get<Scale[]>("/scales");
+      setScales(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar escalas!", error);
+      setError("Erro ao buscar escalas. Tente novamente mais tarde.");
+    } finally {
+      setLoadingScale(false);
+    }
+  }
 
   async function handleSubmit() {
     if (!title.trim() || !periodScale.trim() || colaborators.length === 0) {
@@ -97,10 +114,43 @@ export function useScaleAndColaborators(
     }
   }
 
+  function handleRemoveScale(id: number, title: string) {
+    Alert.alert(
+      "Remover escala",
+      `Você tem certeza que deseja remover ${title}?`,
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Remover",
+          onPress: async () => {
+            const scaleToRemove = scales.find((scale) => scale.id === id);
+            if (!scaleToRemove) return;
+
+            setScales((prev) => prev.filter((scale) => scale.id !== id));
+            try {
+              await api.delete(`/scales/${id}`);
+            } catch (error) {
+              console.error("Erro ao remover escala!", error);
+
+              setScales((prev) => [...prev, scaleToRemove]);
+              Alert.alert(
+                "Erro",
+                "Não foi possível remover a escala. Tente novamente."
+              );
+            }
+          },
+        },
+      ]
+    );
+  }
+
   function resetInputs() {
     setTitle("");
-    setMonth(0);
-    setYear(0);
+    setMonth("");
+    setYear("");
     setPeriodScale("");
     setColaborators([]);
   }
@@ -171,32 +221,36 @@ export function useScaleAndColaborators(
   }
 
   return {
-    title,
-    setTitle,
-    month,
-    setMonth,
     year,
+    title,
+    month,
+    scales,
+    loading,
     setYear,
+    setMonth,
+    setTitle,
+    weekdays,
+    toggleDay,
+    fetchScales,
     periodScale,
     handleSubmit,
     colaborators,
+    loadingScale,
+    isDaySelected,
+    fetchScaleById,
     setColaborators,
-    weekdays,
-    toggleDay,
     colaboratorName,
     colaboratorTurn,
     colaboratorSunday,
+    handleRemoveScale,
     colaboratorWeekday,
     setColaboratorName,
     setColaboratorTurn,
     setColaboratorSunday,
-    setColaboratorWeekday,
-    handleAddColaborator,
-    handleRemoveColaborator,
     showColaboratorInput,
+    handleAddColaborator,
+    setColaboratorWeekday,
+    handleRemoveColaborator,
     setShowColaboratorInput,
-    fetchScaleById,
-    isDaySelected,
-    loading,
   };
 }

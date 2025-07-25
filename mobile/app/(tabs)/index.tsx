@@ -23,9 +23,9 @@ export default function Home() {
           {"\n"}inteligente!
         </Text>
         <Form
-          year={year}
-          month={month}
           title={title}
+          year={year.trim()}
+          month={month.trim()}
           onChangeYear={setYear}
           onChangeMonth={setMonth}
           onChangeTitle={setTitle}
