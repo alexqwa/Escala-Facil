@@ -1,4 +1,7 @@
-import { useEffect } from "react";
+import dayjs from "dayjs";
+import * as Print from "expo-print";
+import { shareAsync } from "expo-sharing";
+import { useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import {
@@ -9,8 +12,8 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  KeyboardAvoidingView,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from "react-native";
 
 import { useScales } from "@/src/hooks/useScales";
@@ -56,6 +59,163 @@ export default function EditablePage() {
   }, [id]);
 
   const isDisabled = !title || !month || colaborators.length === 0;
+
+  const getNextSundaysAfter20th = (
+    year: number,
+    month: number,
+    count: number = 5
+  ): string[] => {
+    let currentDate = dayjs(new Date(year, month - 1, 20));
+    const sundays: string[] = [];
+
+    if (currentDate.day() !== 0) {
+      currentDate = currentDate.day(7);
+    }
+
+    for (let i = 0; i < count; i++) {
+      sundays.push(currentDate.format("DD/MM/YYYY"));
+      currentDate = currentDate.add(7, "days");
+    }
+    return sundays;
+  };
+
+  const sundays = getNextSundaysAfter20th(Number(year), Number(month));
+
+  const html = `
+  <!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700;900&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 3rem;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th, td {
+        border: 1px solid #000;
+        text-align: center;
+        padding: 0.5rem;
+      }
+
+      th {
+        background-color: #5b9bd5;
+        color: black;
+        font-weight: 700;
+      }
+
+      .header th {
+        background-color: #002060;
+        height: 80px;
+        font-size: 1.5rem;
+        color: white;
+        text-transform: uppercase;
+      }
+
+      .day-off {
+        background-color: #f2f2f2;
+        font-weight: bold;
+      }
+
+      .turn {
+        background-color: #f2f2f2;
+        font-weight: bold;
+      }
+
+      .dsr {
+        background-color: #2f75b5;
+        font-weight: bold;
+      }
+
+      .day {
+        background-color: #5b9bd5;
+        font-weight: bold;
+      }
+
+      .uppercase {
+        text-transform: uppercase;
+      }
+
+      .small-text {
+        font-size: 0.875rem;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <table role="table">
+      <thead>
+        <tr class="header">
+          <th colspan="8">Escala (${title}) ${periodScale}</th>
+        </tr>
+        <tr>
+          <th colspan="3">DIA DO MÊS</th>
+          ${sundays.map((date, i) => `<th key="${i}">${date}</th>`).join("")}
+        </tr>
+        <tr>
+          <th>NOME</th>
+          <th>FOLGA DA SEMANA</th>
+          <th>TURNO</th>
+          <th>DOM</th>
+          <th>DOM</th>
+          <th>DOM</th>
+          <th>DOM</th>
+          <th>DOM</th>
+        </tr>
+      </thead>
+      <tbody>
+      ${colaborators
+        .map(
+          (item, i) => `
+        <tr key="${i}">
+          <td class="uppercase small-text">${item.name}</td>
+          <td class="day-off small-text">${dayjs()
+            .day(Number(item.weekday))
+            .format("dddd")
+            .toUpperCase()}</td>
+          <td class="turn small-text">${item.turn ? "MANHÃ" : "TARDE"}</td>
+          <td class="dsr small-text">DSR</td>
+          <td class="day small-text">1</td>
+          <td class="day small-text">1</td>
+          <td class="day small-text">1</td>
+          <td class="dsr small-text">DSR</td>
+        </tr>
+      `
+        )
+        .join("")}
+      </tbody>
+      </table>
+  </body>
+</html>
+  `;
+
+  const [selectedPrinter, setSelectedPrinter] = useState<
+    { url: string } | undefined
+  >();
+
+  const print = async () => {
+    await Print.printAsync({
+      html,
+      orientation: "landscape",
+      printerUrl: selectedPrinter?.url,
+    });
+  };
+
+  const printToFile = async () => {
+    const { uri } = await Print.printToFileAsync({ html });
+    console.log("File has been saved to:", uri);
+    await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
+  };
 
   return (
     <View className="flex-1 items-center bg-[#121214]">
@@ -186,14 +346,19 @@ export default function EditablePage() {
             </View>
 
             <View className="bg-[#202024] h-[1px] my-6 w-[80%] self-center" />
-            <Button
-              isChange
-              isLoading={loading}
-              disabled={isDisabled}
-              isInactive={isDisabled}
-              title="SALVAR ALTERAÇÕES"
-              onPress={() => handleUpdate(Number(id))}
-            />
+            <View className="space-y-4">
+              <Button isDark title="GERAR PDF" onPress={print}>
+                <Feather name="file-text" size={18} color="#fff" />
+              </Button>
+              <Button
+                isChange
+                isLoading={loading}
+                disabled={isDisabled}
+                isInactive={isDisabled}
+                title="SALVAR ALTERAÇÕES"
+                onPress={() => handleUpdate(Number(id))}
+              />
+            </View>
           </ScrollView>
         </KeyboardAvoidingView>
       )}

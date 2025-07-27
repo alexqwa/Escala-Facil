@@ -40,7 +40,7 @@ export function Button({
     >
       {children}
       {isLoading ? (
-        <ActivityIndicator size="small" color="#fff" />
+        <ActivityIndicator size="small" color={isChange ? "#000" : "#fff"} />
       ) : (
         <Text
           className={clsx("text-white text-base font-archivo_700", {
