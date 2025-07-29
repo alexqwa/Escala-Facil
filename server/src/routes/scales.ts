@@ -13,7 +13,7 @@ export async function scaleRoutes(app: FastifyInstance) {
       sunday: z
         .number()
         .int()
-        .nonnegative('Deve ser um número inteiro não negativo.'),
+        .nonnegative('Deve ser um número inteiro não negativo.')
     });
 
     const scaleSchema = z.object({

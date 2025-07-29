@@ -16,16 +16,18 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 
+import { useDates } from "@/src/hooks/useDates";
 import { useScales } from "@/src/hooks/useScales";
 
 import { Day } from "@/src/components/Day";
 import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
 import { Button } from "@/src/components/Button";
-import { ColaboratorItem } from "@/src/components/ColaboratorItem";
+import { Colaborator } from "@/src/components/Colaborator";
 
 export default function EditablePage() {
   const { id } = useLocalSearchParams();
+  const { nextSundaysAfter20th } = useDates();
   const {
     year,
     title,
@@ -60,26 +62,7 @@ export default function EditablePage() {
 
   const isDisabled = !title || !month || colaborators.length === 0;
 
-  const getNextSundaysAfter20th = (
-    year: number,
-    month: number,
-    count: number = 5
-  ): string[] => {
-    let currentDate = dayjs(new Date(year, month - 1, 20));
-    const sundays: string[] = [];
-
-    if (currentDate.day() !== 0) {
-      currentDate = currentDate.day(7);
-    }
-
-    for (let i = 0; i < count; i++) {
-      sundays.push(currentDate.format("DD/MM/YYYY"));
-      currentDate = currentDate.add(7, "days");
-    }
-    return sundays;
-  };
-
-  const sundays = getNextSundaysAfter20th(Number(year), Number(month));
+  const sundays = nextSundaysAfter20th(Number(year), Number(month));
 
   const html = `
   <!DOCTYPE html>
@@ -156,7 +139,7 @@ export default function EditablePage() {
     <table role="table">
       <thead>
         <tr class="header">
-          <th colspan="8">Escala (${title}) ${periodScale}</th>
+          <th colspan="8">Escala (${title.trim()}) ${periodScale}</th>
         </tr>
         <tr>
           <th colspan="3">DIA DO MÊS</th>
@@ -179,10 +162,15 @@ export default function EditablePage() {
           (item, i) => `
         <tr key="${i}">
           <td class="uppercase small-text">${item.name}</td>
-          <td class="day-off small-text">${dayjs()
-            .day(Number(item.weekday))
-            .format("dddd")
-            .toUpperCase()}</td>
+          <td class="day-off small-text">${
+            Array.isArray(item.weekday)
+              ? item.weekday
+                  .map((w: number) =>
+                    dayjs().day(w).format("dddd").toUpperCase()
+                  )
+                  .join(" / ")
+              : dayjs().day(item.weekday).format("dddd").toUpperCase()
+          }</td>
           <td class="turn small-text">${item.turn ? "MANHÃ" : "TARDE"}</td>
           <td class="dsr small-text">DSR</td>
           <td class="day small-text">1</td>
@@ -199,22 +187,11 @@ export default function EditablePage() {
 </html>
   `;
 
-  const [selectedPrinter, setSelectedPrinter] = useState<
-    { url: string } | undefined
-  >();
-
   const print = async () => {
     await Print.printAsync({
       html,
       orientation: "landscape",
-      printerUrl: selectedPrinter?.url,
     });
-  };
-
-  const printToFile = async () => {
-    const { uri } = await Print.printToFileAsync({ html });
-    console.log("File has been saved to:", uri);
-    await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
   };
 
   return (
@@ -267,7 +244,7 @@ export default function EditablePage() {
                   keyExtractor={(item) => item.name}
                   renderItem={({ item }) => {
                     return (
-                      <ColaboratorItem
+                      <Colaborator
                         name={item.name}
                         turn={item.turn}
                         sunday={item.sunday}

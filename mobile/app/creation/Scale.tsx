@@ -17,7 +17,8 @@ import { Day } from "@/src/components/Day";
 import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
 import { Button } from "@/src/components/Button";
-import { ColaboratorItem } from "@/src/components/ColaboratorItem";
+import { DatePicker } from "@/src/components/DatePicker";
+import { Colaborator } from "@/src/components/Colaborator";
 
 export default function Scale() {
   const { titleParams, monthParams, yearParams } = useLocalSearchParams();
@@ -96,7 +97,7 @@ export default function Scale() {
                 keyExtractor={(item) => item.name}
                 renderItem={({ item }) => {
                   return (
-                    <ColaboratorItem
+                    <Colaborator
                       name={item.name}
                       turn={item.turn}
                       sunday={item.sunday}
@@ -111,26 +112,14 @@ export default function Scale() {
                   <View className="h-14 flex-row flex-1 divide-x-[1px] divide-[#323238]">
                     <TextInput
                       autoFocus
+                      placeholder="Nome"
                       value={colaboratorName}
                       onChangeText={setColaboratorName}
                       className="flex-1 px-4 text-white font-archivo_600 text-base"
-                      placeholder="Nome do colaborador"
                       placeholderTextColor="#E1E1E6"
                       cursorColor="#fff"
                     />
-                    <View className="w-14 items-center justify-center">
-                      <TextInput
-                        value={colaboratorSunday.toString()}
-                        onChangeText={(text) =>
-                          setColaboratorSunday(Number(text))
-                        }
-                        className="text-white w-full text-center font-archivo_600 text-base flex-1"
-                        placeholderTextColor="#e1e1e5"
-                        keyboardType="number-pad"
-                        cursorColor="#fff"
-                        maxLength={2}
-                      />
-                    </View>
+                    <DatePicker />
                     <TouchableOpacity
                       activeOpacity={0.7}
                       className="w-12 items-center justify-center"

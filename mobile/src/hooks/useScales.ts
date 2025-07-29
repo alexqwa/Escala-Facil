@@ -184,8 +184,8 @@ export function useScales(
   }
 
   function handleAddColaborator() {
-    if (!colaboratorName.trim()) {
-      Alert.alert("Erro", "O nome do colaborador é obrigatório.");
+    if (!colaboratorName.trim() || colaboratorWeekday.length === 0) {
+      Alert.alert("Erro", "Todos os dados são obrigatório.");
       return;
     }
 
@@ -237,12 +237,29 @@ export function useScales(
     setColaboratorWeekday((prev) => {
       const existingIndex = prev.indexOf(dayNumber);
       if (existingIndex >= 0) {
-        return prev.filter((day) => day != dayNumber);
+        // Se o dia já está marcado, removê-lo
+        return prev.filter((day) => day !== dayNumber);
       } else {
-        return [...prev, dayNumber];
+        // Se o dia não está marcado, verificar se já existem 2 dias marcados
+        if (prev.length < 2) {
+          return [...prev, dayNumber]; // Adicionar o novo dia
+        } else {
+          return prev; // Não adicionar se já houver 2 dias
+        }
       }
     });
   }
+
+  // function toggleDay(dayNumber: number) {
+  //   setColaboratorWeekday((prev) => {
+  //     const existingIndex = prev.indexOf(dayNumber);
+  //     if (existingIndex >= 0) {
+  //       return prev.filter((day) => day != dayNumber);
+  //     } else {
+  //       return [...prev, dayNumber];
+  //     }
+  //   });
+  // }
 
   function isDaySelected(dayNumber: number) {
     return colaboratorWeekday.includes(dayNumber);

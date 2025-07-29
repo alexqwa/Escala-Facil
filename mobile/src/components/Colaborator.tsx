@@ -11,7 +11,7 @@ interface ColaboratorProps {
   onRemove: () => void;
 }
 
-export function ColaboratorItem({
+export function Colaborator({
   name,
   turn,
   sunday,
@@ -29,9 +29,9 @@ export function ColaboratorItem({
         <View className="flex-1 px-4 justify-center">
           <Text className="text-white font-archivo_600 text-base">{name}</Text>
         </View>
-        <View className="w-14 items-center justify-center">
+        <View className="px-3 items-center justify-center">
           <Text className="text-white font-archivo_600 text-base">
-            {sunday}
+            25/02/2025
           </Text>
         </View>
         <View className="w-12 items-center justify-center">
