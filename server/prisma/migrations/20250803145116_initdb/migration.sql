@@ -14,7 +14,7 @@ CREATE TABLE "colaborators" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "turn" BOOLEAN NOT NULL,
-    "sunday" INTEGER NOT NULL,
+    "sunday" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "weekday" INTEGER[],
     "scaleId" INTEGER NOT NULL,
 
