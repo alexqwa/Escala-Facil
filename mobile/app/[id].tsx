@@ -190,9 +190,10 @@ export default function EditablePage() {
           ${sundays
             .map((sunday) => {
               const isDSR = datesEvery28Days.includes(sunday);
-              return `<td class="${isDSR ? "dsr" : "work"} small-text">${
-                isDSR ? "DSR" : "1"
-              }</td>`;
+              const isAllDSR = item.weekday.includes(0);
+              return `<td class="${
+                isDSR || isAllDSR ? "dsr" : "work"
+              } small-text">${isDSR || isAllDSR ? "DSR" : "1"}</td>`;
             })
             .join("")}
         </tr>
