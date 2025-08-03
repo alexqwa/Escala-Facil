@@ -28,7 +28,7 @@ import { Colaborator } from "@/src/components/Colaborator";
 export default function EditablePage() {
   const { id } = useLocalSearchParams();
   const [show, setShow] = useState(false);
-  const { nextSundaysAfter20th } = useDates();
+  const { nextSundaysAfter20th, getDatesEvery28Days } = useDates();
 
   const {
     year,
@@ -171,8 +171,10 @@ export default function EditablePage() {
       </thead>
       <tbody>
       ${colaborators
-        .map(
-          (item, i) => `
+        .map((item, i) => {
+          const datesEvery28Days = getDatesEvery28Days(item.sunday);
+
+          return `
         <tr key="${i}">
           <td class="uppercase small-text">${item.name}</td>
           <td class="day-off small-text">${
@@ -186,22 +188,16 @@ export default function EditablePage() {
           }</td>
           <td class="turn small-text">${item.turn ? "MANHÃ" : "TARDE"}</td>
           ${sundays
-            .map(
-              (sunday) =>
-                `<td class="${
-                  sunday === dayjs(item.sunday).format("DD/MM/YYYY")
-                    ? "dsr"
-                    : "work"
-                } small-text">${
-                  sunday === dayjs(item.sunday).format("DD/MM/YYYY")
-                    ? "DSR"
-                    : "1"
-                }</td>`
-            )
+            .map((sunday) => {
+              const isDSR = datesEvery28Days.includes(sunday);
+              return `<td class="${isDSR ? "dsr" : "work"} small-text">${
+                isDSR ? "DSR" : "1"
+              }</td>`;
+            })
             .join("")}
         </tr>
-      `
-        )
+            `;
+        })
         .join("")}
       </tbody>
     </table>

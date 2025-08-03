@@ -22,7 +22,23 @@ export function useDates() {
     return sundays;
   };
 
+  function getDatesEvery28Days(startDate: Date, count = 30) {
+    // Parse the start date using dayjs (make sure dayjs is imported)
+    let currentDate = dayjs(startDate, "DD/MM/YYYY");
+    const result = [];
+
+    for (let i = 0; i < count; i++) {
+      // Add the current date to results in DD/MM/YYYY format
+      result.push(currentDate.format("DD/MM/YYYY"));
+      // Add 27 days to the current date
+      currentDate = currentDate.add(28, "days");
+    }
+
+    return result;
+  }
+
   return {
     nextSundaysAfter20th,
+    getDatesEvery28Days,
   };
 }
