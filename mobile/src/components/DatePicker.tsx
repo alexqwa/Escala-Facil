@@ -13,6 +13,8 @@ export function DatePicker() {
     setDate(currentDate);
   };
 
+  console.log(date);
+
   return (
     <TouchableOpacity
       className="px-3 border-l border-[#323238] items-center justify-center"

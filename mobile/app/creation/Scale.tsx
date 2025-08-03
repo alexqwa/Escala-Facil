@@ -1,5 +1,8 @@
+import dayjs from "dayjs";
+import { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   Text,
   View,
@@ -17,11 +20,11 @@ import { Day } from "@/src/components/Day";
 import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
 import { Button } from "@/src/components/Button";
-import { DatePicker } from "@/src/components/DatePicker";
 import { Colaborator } from "@/src/components/Colaborator";
 
 export default function Scale() {
   const { titleParams, monthParams, yearParams } = useLocalSearchParams();
+  const [show, setShow] = useState(false);
 
   const {
     year,
@@ -54,6 +57,12 @@ export default function Scale() {
   );
 
   const isDisabled = !title || !month || colaborators.length === 0 || loading;
+
+  const onChangeDate = (event: any, selectedDate?: Date) => {
+    const currentDate = selectedDate || colaboratorSunday;
+    setShow(false);
+    setColaboratorSunday(currentDate);
+  };
 
   return (
     <View className="flex-1 items-center bg-[#121214]">
@@ -119,7 +128,24 @@ export default function Scale() {
                       placeholderTextColor="#E1E1E6"
                       cursorColor="#fff"
                     />
-                    <DatePicker />
+                    <TouchableOpacity
+                      className="px-3 border-l border-[#323238] items-center justify-center"
+                      activeOpacity={0.7}
+                      onPress={() => setShow(true)}
+                    >
+                      {show && (
+                        <DateTimePicker
+                          is24Hour
+                          mode="date"
+                          display="calendar"
+                          value={colaboratorSunday}
+                          onChange={onChangeDate}
+                        />
+                      )}
+                      <Text className="text-white text-base font-archivo_600">
+                        {dayjs(colaboratorSunday).format("DD/MM/YYYY")}
+                      </Text>
+                    </TouchableOpacity>
                     <TouchableOpacity
                       activeOpacity={0.7}
                       className="w-12 items-center justify-center"

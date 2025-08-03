@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 import * as Print from "expo-print";
-import { shareAsync } from "expo-sharing";
 import { useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   Text,
   View,
@@ -27,7 +27,9 @@ import { Colaborator } from "@/src/components/Colaborator";
 
 export default function EditablePage() {
   const { id } = useLocalSearchParams();
+  const [show, setShow] = useState(false);
   const { nextSundaysAfter20th } = useDates();
+
   const {
     year,
     title,
@@ -61,6 +63,12 @@ export default function EditablePage() {
   }, [id]);
 
   const isDisabled = !title || !month || colaborators.length === 0;
+
+  const onChangeDate = (event: any, selectedDate?: Date) => {
+    const currentDate = selectedDate || colaboratorSunday;
+    setShow(false);
+    setColaboratorSunday(currentDate);
+  };
 
   const sundays = nextSundaysAfter20th(Number(year), Number(month));
 
@@ -115,8 +123,13 @@ export default function EditablePage() {
         font-weight: bold;
       }
 
-      .dsr {
+      .work {
         background-color: #2f75b5;
+        font-weight: bold;
+      }
+
+      .dsr {
+        background-color: #185892;
         font-weight: bold;
       }
 
@@ -172,17 +185,26 @@ export default function EditablePage() {
               : dayjs().day(item.weekday).format("dddd").toUpperCase()
           }</td>
           <td class="turn small-text">${item.turn ? "MANHÃ" : "TARDE"}</td>
-          <td class="dsr small-text">DSR</td>
-          <td class="day small-text">1</td>
-          <td class="day small-text">1</td>
-          <td class="day small-text">1</td>
-          <td class="dsr small-text">DSR</td>
+          ${sundays
+            .map(
+              (sunday) =>
+                `<td class="${
+                  sunday === dayjs(item.sunday).format("DD/MM/YYYY")
+                    ? "dsr"
+                    : "work"
+                } small-text">${
+                  sunday === dayjs(item.sunday).format("DD/MM/YYYY")
+                    ? "DSR"
+                    : "1"
+                }</td>`
+            )
+            .join("")}
         </tr>
       `
         )
         .join("")}
       </tbody>
-      </table>
+    </table>
   </body>
 </html>
   `;
@@ -259,26 +281,31 @@ export default function EditablePage() {
                     <View className="h-14 flex-row flex-1 divide-x-[1px] divide-[#323238]">
                       <TextInput
                         autoFocus
+                        placeholder="Nome"
                         value={colaboratorName}
                         onChangeText={setColaboratorName}
                         className="flex-1 px-4 text-white font-archivo_600 text-base"
-                        placeholder="Nome do colaborador"
                         placeholderTextColor="#E1E1E6"
                         cursorColor="#fff"
                       />
-                      <View className="w-14 items-center justify-center">
-                        <TextInput
-                          value={colaboratorSunday.toString()}
-                          onChangeText={(text) =>
-                            setColaboratorSunday(Number(text))
-                          }
-                          className="text-white w-full text-center font-archivo_600 text-base flex-1"
-                          placeholderTextColor="#e1e1e5"
-                          keyboardType="number-pad"
-                          cursorColor="#fff"
-                          maxLength={2}
-                        />
-                      </View>
+                      <TouchableOpacity
+                        className="px-3 border-l border-[#323238] items-center justify-center"
+                        activeOpacity={0.7}
+                        onPress={() => setShow(true)}
+                      >
+                        {show && (
+                          <DateTimePicker
+                            is24Hour
+                            mode="date"
+                            display="calendar"
+                            value={colaboratorSunday}
+                            onChange={onChangeDate}
+                          />
+                        )}
+                        <Text className="text-white text-base font-archivo_600">
+                          {dayjs(colaboratorSunday).format("DD/MM/YYYY")}
+                        </Text>
+                      </TouchableOpacity>
                       <TouchableOpacity
                         activeOpacity={0.7}
                         className="w-12 items-center justify-center"

@@ -10,7 +10,7 @@ import { Button } from "@/src/components/Button";
 export default function Home() {
   const [title, setTitle] = useState("");
   const [year, setYear] = useState(dayjs().format("YYYY"));
-  const [month, setMonth] = useState(String(dayjs().month()));
+  const [month, setMonth] = useState(String(dayjs().month() + 1));
 
   const isDisabled = !title || !month || !year;
 

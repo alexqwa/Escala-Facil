@@ -17,9 +17,9 @@ interface Scale {
 }
 
 interface Colaborator {
+  sunday: Date;
   name: string;
   turn: boolean;
-  sunday: number;
   weekday: number[];
 }
 
@@ -43,7 +43,7 @@ export function useScales(
   // Estados para os colaboradores
   const [colaboratorName, setColaboratorName] = useState("");
   const [colaboratorTurn, setColaboratorTurn] = useState(true);
-  const [colaboratorSunday, setColaboratorSunday] = useState(0);
+  const [colaboratorSunday, setColaboratorSunday] = useState(new Date());
   const [showColaboratorInput, setShowColaboratorInput] = useState(false);
   const [colaboratorWeekday, setColaboratorWeekday] = useState<number[]>([]);
   const [loading, setLoading] = useState(false);
@@ -222,10 +222,10 @@ export function useScales(
 
   function resetColaboratorInputs() {
     setColaboratorName("");
-    setColaboratorSunday(0);
     setColaboratorTurn(true);
     setColaboratorWeekday([]);
     setShowColaboratorInput(false);
+    setColaboratorSunday(new Date());
   }
 
   const weekdays = [...Array(7)].map((_, i) => ({

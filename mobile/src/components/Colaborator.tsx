@@ -4,9 +4,9 @@ import { Feather } from "@expo/vector-icons";
 import { Text, View, TouchableOpacity } from "react-native";
 
 interface ColaboratorProps {
+  sunday: Date;
   name: string;
   turn: boolean;
-  sunday: number;
   selectedDays: number[];
   onRemove: () => void;
 }
@@ -31,7 +31,7 @@ export function Colaborator({
         </View>
         <View className="px-3 items-center justify-center">
           <Text className="text-white font-archivo_600 text-base">
-            25/02/2025
+            {dayjs(sunday).format("DD/MM/YYYY")}
           </Text>
         </View>
         <View className="w-12 items-center justify-center">
