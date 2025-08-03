@@ -25,13 +25,13 @@ model Scale {
 }
 
 model Colaborator {
-  id      Int     @id @default(autoincrement())
+  id      Int      @id @default(autoincrement())
   name    String
   turn    Boolean
-  sunday  Int
+  sunday  DateTime @default(now())
   weekday Int[]
   scaleId Int
-  scale   Scale   @relation(fields: [scaleId], references: [id], onDelete: Cascade)
+  scale   Scale    @relation(fields: [scaleId], references: [id], onDelete: Cascade)
 
   @@map("colaborators")
 }
