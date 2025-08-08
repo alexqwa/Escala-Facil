@@ -85,7 +85,7 @@ export default function EditablePage() {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 3rem;
+        margin: 7rem;
       }
 
       table {
@@ -96,7 +96,7 @@ export default function EditablePage() {
       th, td {
         border: 1px solid #000;
         text-align: center;
-        padding: 0.5rem;
+        height: 20px;
       }
 
       th {
@@ -116,26 +116,25 @@ export default function EditablePage() {
       .day-off {
         background-color: #f2f2f2;
         font-weight: bold;
+        width: 200px;
       }
 
       .turn {
         background-color: #f2f2f2;
         font-weight: bold;
+        width: 75px;
       }
 
       .work {
         background-color: #2f75b5;
         font-weight: bold;
+        width: 75px;
       }
 
       .dsr {
         background-color: #185892;
         font-weight: bold;
-      }
-
-      .day {
-        background-color: #5b9bd5;
-        font-weight: bold;
+        width: 75px;
       }
 
       .uppercase {
@@ -143,7 +142,7 @@ export default function EditablePage() {
       }
 
       .small-text {
-        font-size: 0.875rem;
+        font-size: 0.625rem;
         font-weight: bold;
       }
     </style>
@@ -155,18 +154,20 @@ export default function EditablePage() {
           <th colspan="8">Escala (${title.trim()}) ${periodScale}</th>
         </tr>
         <tr>
-          <th colspan="3">DIA DO MÊS</th>
-          ${sundays.map((date, i) => `<th key="${i}">${date}</th>`).join("")}
+          <th class="small-text" colspan="3">DIA DO MÊS</th>
+          ${sundays
+            .map((date, i) => `<th class="small-text" key="${i}">${date}</th>`)
+            .join("")}
         </tr>
         <tr>
-          <th>NOME</th>
-          <th>FOLGA DA SEMANA</th>
-          <th>TURNO</th>
-          <th>DOM</th>
-          <th>DOM</th>
-          <th>DOM</th>
-          <th>DOM</th>
-          <th>DOM</th>
+          <th class="small-text">NOME</th>
+          <th class="small-text">FOLGA DA SEMANA</th>
+          <th class="small-text">TURNO</th>
+          <th class="small-text">DOM</th>
+          <th class="small-text">DOM</th>
+          <th class="small-text">DOM</th>
+          <th class="small-text">DOM</th>
+          <th class="small-text">DOM</th>
         </tr>
       </thead>
       <tbody>
@@ -354,8 +355,8 @@ export default function EditablePage() {
               <Button
                 isChange
                 isLoading={loading}
-                disabled={isDisabled}
-                isInactive={isDisabled}
+                disabled={isDisabled || loading}
+                isInactive={isDisabled || loading}
                 title="SALVAR ALTERAÇÕES"
                 onPress={() => handleUpdate(Number(id))}
               />

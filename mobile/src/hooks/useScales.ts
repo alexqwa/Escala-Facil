@@ -20,6 +20,7 @@ interface Colaborator {
   sunday: Date;
   name: string;
   turn: boolean;
+  woman: boolean;
   weekday: number[];
 }
 
@@ -43,6 +44,7 @@ export function useScales(
   // Estados para os colaboradores
   const [colaboratorName, setColaboratorName] = useState("");
   const [colaboratorTurn, setColaboratorTurn] = useState(true);
+  const [colaboratorWoman, setColaboratorWoman] = useState(false);
   const [colaboratorSunday, setColaboratorSunday] = useState(new Date());
   const [showColaboratorInput, setShowColaboratorInput] = useState(false);
   const [colaboratorWeekday, setColaboratorWeekday] = useState<number[]>([]);
@@ -192,6 +194,7 @@ export function useScales(
     const newColaborator: Colaborator = {
       name: colaboratorName,
       turn: colaboratorTurn,
+      woman: colaboratorWoman,
       sunday: colaboratorSunday,
       weekday: colaboratorWeekday,
     };
@@ -223,6 +226,7 @@ export function useScales(
   function resetColaboratorInputs() {
     setColaboratorName("");
     setColaboratorTurn(true);
+    setColaboratorWoman(false);
     setColaboratorWeekday([]);
     setShowColaboratorInput(false);
     setColaboratorSunday(new Date());
@@ -288,11 +292,13 @@ export function useScales(
     setColaborators,
     colaboratorName,
     colaboratorTurn,
+    colaboratorWoman,
     colaboratorSunday,
     handleRemoveScale,
     colaboratorWeekday,
     setColaboratorName,
     setColaboratorTurn,
+    setColaboratorWoman,
     setColaboratorSunday,
     showColaboratorInput,
     handleAddColaborator,

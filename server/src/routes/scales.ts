@@ -7,6 +7,7 @@ export async function scaleRoutes(app: FastifyInstance) {
     const colaboratorSchema = z.object({
       name: z.string().min(1, 'Nome é obrigatório.'),
       turn: z.boolean(),
+      woman: z.boolean(),
       weekday: z.array(
         z.number().int().nonnegative('Deve ser um número inteiro não negativo.')
       ),
@@ -35,6 +36,7 @@ export async function scaleRoutes(app: FastifyInstance) {
             create: colaborators.map((colaborator) => ({
               name: colaborator.name,
               turn: colaborator.turn,
+              woman: colaborator.woman,
               sunday: colaborator.sunday,
               weekday: colaborator.weekday,
             })),
@@ -117,6 +119,7 @@ export async function scaleRoutes(app: FastifyInstance) {
     const colaboratorSchema = z.object({
       name: z.string().min(1, 'Nome é obrigatório.'),
       turn: z.boolean(),
+      woman: z.boolean(),
       weekday: z.array(
         z.number().int().nonnegative('Deve ser um número inteiro não negativo.')
       ),
@@ -153,6 +156,7 @@ export async function scaleRoutes(app: FastifyInstance) {
             create: colaborators.map((colaborator) => ({
               name: colaborator.name,
               turn: colaborator.turn,
+              woman: colaborator.woman,
               sunday: colaborator.sunday,
               weekday: colaborator.weekday,
             })),

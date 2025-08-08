@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { useState } from "react";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {
@@ -25,6 +25,7 @@ import { Colaborator } from "@/src/components/Colaborator";
 export default function Scale() {
   const { titleParams, monthParams, yearParams } = useLocalSearchParams();
   const [show, setShow] = useState(false);
+  const [woman, setWoman] = useState(false);
 
   const {
     year,
@@ -42,9 +43,11 @@ export default function Scale() {
     isDaySelected,
     colaboratorName,
     colaboratorTurn,
+    colaboratorWoman,
     colaboratorSunday,
     setColaboratorTurn,
     setColaboratorName,
+    setColaboratorWoman,
     setColaboratorSunday,
     handleAddColaborator,
     showColaboratorInput,
@@ -121,7 +124,7 @@ export default function Scale() {
                   <View className="h-14 flex-row flex-1 divide-x-[1px] divide-[#323238]">
                     <TextInput
                       autoFocus
-                      placeholder="Nome"
+                      placeholder="Nome do colaborador"
                       value={colaboratorName}
                       onChangeText={setColaboratorName}
                       className="flex-1 px-4 text-white font-archivo_600 text-base"
@@ -129,7 +132,60 @@ export default function Scale() {
                       cursorColor="#fff"
                     />
                     <TouchableOpacity
-                      className="px-3 border-l border-[#323238] items-center justify-center"
+                      activeOpacity={0.7}
+                      onPress={handleAddColaborator}
+                      className="w-14 items-center justify-center"
+                    >
+                      <Ionicons
+                        name="add-circle-outline"
+                        size={22}
+                        color="#fff"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <View className="p-4">
+                    <View className="flex-row justify-between">
+                      {weekdays.map(({ day, initial }) => (
+                        <Day
+                          key={day}
+                          day={initial}
+                          isActive={isDaySelected(day)}
+                          onPress={() => toggleDay(day)}
+                        />
+                      ))}
+                    </View>
+                  </View>
+                  <View className="p-4 flex-row items-center space-x-2">
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={() => setColaboratorWoman(!colaboratorWoman)}
+                      className="bg-[#323238] flex-1 py-2 flex-row items-center space-x-2 justify-center rounded-lg"
+                    >
+                      <Ionicons
+                        name={colaboratorWoman ? "woman" : "man"}
+                        color="#fff"
+                        size={18}
+                      />
+                      <Text className="text-white font-archivo_600 text-sm">
+                        {colaboratorWoman ? "Mulher" : "Homem"}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      className="bg-[#323238] flex-1 py-2 flex-row items-center space-x-2 justify-center rounded-lg"
+                      onPress={() => setColaboratorTurn(!colaboratorTurn)}
+                    >
+                      <Ionicons
+                        name={colaboratorTurn ? "sunny" : "moon"}
+                        size={18}
+                        color="#fff"
+                      />
+                      <Text className="text-white font-archivo_600 text-sm">
+                        {colaboratorTurn ? "Manhã" : "Tarde"}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      className="bg-[#323238] flex-1 py-2 flex-row items-center justify-center rounded-lg"
                       activeOpacity={0.7}
                       onPress={() => setShow(true)}
                     >
@@ -142,38 +198,10 @@ export default function Scale() {
                           onChange={onChangeDate}
                         />
                       )}
-                      <Text className="text-white text-base font-archivo_600">
+                      <Text className="text-white text-sm font-archivo_600">
                         {dayjs(colaboratorSunday).format("DD/MM/YYYY")}
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      className="w-12 items-center justify-center"
-                      onPress={() => setColaboratorTurn(!colaboratorTurn)}
-                    >
-                      <Feather
-                        name={colaboratorTurn ? "sun" : "moon"}
-                        size={18}
-                        color="#fff"
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      onPress={handleAddColaborator}
-                      className="w-12 items-center justify-center"
-                    >
-                      <Feather name="plus" size={18} color="#fff" />
-                    </TouchableOpacity>
-                  </View>
-                  <View className="p-4 flex-row justify-between">
-                    {weekdays.map(({ day, initial }) => (
-                      <Day
-                        key={day}
-                        day={initial}
-                        isActive={isDaySelected(day)}
-                        onPress={() => toggleDay(day)}
-                      />
-                    ))}
                   </View>
                 </View>
               ) : (
