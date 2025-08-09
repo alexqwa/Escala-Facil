@@ -25,7 +25,6 @@ import { Colaborator } from "@/src/components/Colaborator";
 export default function Scale() {
   const { titleParams, monthParams, yearParams } = useLocalSearchParams();
   const [show, setShow] = useState(false);
-  const [woman, setWoman] = useState(false);
 
   const {
     year,
@@ -112,6 +111,7 @@ export default function Scale() {
                     <Colaborator
                       name={item.name}
                       turn={item.turn}
+                      woman={item.woman}
                       sunday={item.sunday}
                       selectedDays={item.weekday}
                       onRemove={() => handleRemoveColaborator(item.name)}

@@ -37,8 +37,31 @@ export function useDates() {
     return result;
   }
 
+  function getAlternateSundays(startDate: Date, count = 5) {
+    const result = [];
+    let currentDate = dayjs(startDate);
+    let includeSunday = true;
+
+    // Encontra o primeiro domingo a partir da data inicial
+    while (currentDate.day() !== 0) {
+      currentDate = currentDate.add(1, "day");
+    }
+
+    // Coletar os domingos alternados
+    while (result.length < count) {
+      if (includeSunday) {
+        result.push(currentDate.format("DD/MM/YYYY"));
+      }
+      includeSunday = !includeSunday;
+      currentDate = currentDate.add(7, "day");
+    }
+
+    return result;
+  }
+
   return {
     nextSundaysAfter20th,
     getDatesEvery28Days,
+    getAlternateSundays,
   };
 }
