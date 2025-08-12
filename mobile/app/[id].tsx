@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 import * as Print from "expo-print";
-import { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { Feather, Ionicons } from "@expo/vector-icons";
+import { useEffect, useState, useCallback, memo } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   Text,
@@ -25,12 +25,13 @@ import { Header } from "@/src/components/Header";
 import { Button } from "@/src/components/Button";
 import { Colaborator } from "@/src/components/Colaborator";
 
+const ColaboratorMemo = memo(Colaborator);
+
 export default function EditablePage() {
   const { id } = useLocalSearchParams();
   const [show, setShow] = useState(false);
   const { nextSundaysAfter20th, getDatesEvery28Days, getAlternateSundays } =
     useDates();
-
   const {
     year,
     title,
@@ -75,150 +76,144 @@ export default function EditablePage() {
 
   const sundays = nextSundaysAfter20th(Number(year), Number(month));
 
-  const html = `
-  <!DOCTYPE html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700;900&display=swap" rel="stylesheet">
-    <style>
-      body {
-        font-family: "Inter", sans-serif;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 7rem;
-      }
-
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-
-      th, td {
-        border: 1px solid #000;
-        text-align: center;
-        height: 20px;
-      }
-
-      th {
-        background-color: #5b9bd5;
-        color: black;
-        font-weight: 700;
-      }
-
-      .header th {
-        background-color: #002060;
-        height: 80px;
-        font-size: 1.5rem;
-        color: white;
-        text-transform: uppercase;
-      }
-
-      .day-off {
-        background-color: #f2f2f2;
-        font-weight: bold;
-        width: 200px;
-      }
-
-      .turn {
-        background-color: #f2f2f2;
-        font-weight: bold;
-        width: 75px;
-      }
-
-      .work {
-        background-color: #2f75b5;
-        font-weight: bold;
-        width: 75px;
-      }
-
-      .dsr {
-        background-color: #185892;
-        font-weight: bold;
-        width: 75px;
-      }
-
-      .uppercase {
-        text-transform: uppercase;
-      }
-
-      .small-text {
-        font-size: 0.625rem;
-        font-weight: bold;
-      }
-    </style>
-  </head>
-  <body>
-    <table role="table">
-      <thead>
-        <tr class="header">
-          <th colspan="8">Escala (${title.trim()}) ${periodScale}</th>
-        </tr>
-        <tr>
-          <th class="small-text" colspan="3">DIA DO MÊS</th>
-          ${sundays
-            .map((date, i) => `<th class="small-text" key="${i}">${date}</th>`)
-            .join("")}
-        </tr>
-        <tr>
-          <th class="small-text">NOME</th>
-          <th class="small-text">FOLGA DA SEMANA</th>
-          <th class="small-text">TURNO</th>
-          <th class="small-text">DOM</th>
-          <th class="small-text">DOM</th>
-          <th class="small-text">DOM</th>
-          <th class="small-text">DOM</th>
-          <th class="small-text">DOM</th>
-        </tr>
-      </thead>
-      <tbody>
-      ${colaborators
-        .map((item, i) => {
-          const datesEvery28Days = getDatesEvery28Days(item.sunday);
-          const alternateDates = getAlternateSundays(item.sunday);
-
-          return `
-        <tr key="${i}">
-          <td class="uppercase small-text">${item.name}</td>
-          <td class="day-off small-text">${
-            Array.isArray(item.weekday)
-              ? item.weekday
-                  .map((w: number) =>
-                    dayjs().day(w).format("dddd").toUpperCase()
+  const generateHTML = useCallback(() => {
+    return `
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700;900&display=swap" rel="stylesheet">
+          <style>
+            body {
+              font-family: "Inter", sans-serif;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 7rem;
+            }
+            table {
+              border-collapse: collapse;
+              width: 100%;
+            }
+            th, td {
+              border: 1px solid #000;
+              text-align: center;
+              height: 20px;
+            }
+            th {
+              background-color: #5b9bd5;
+              color: black;
+              font-weight: 700;
+            }
+            .header th {
+              background-color: #002060;
+              height: 80px;
+              font-size: 1.5rem;
+              color: white;
+              text-transform: uppercase;
+            }
+            .day-off {
+              background-color: #f2f2f2;
+              font-weight: bold;
+              width: 200px;
+            }
+            .turn, .work, .dsr {
+              background-color: #f2f2f2;
+              font-weight: bold;
+              width: 75px;
+            }
+            .work {
+              background-color: #2f75b5;
+            }
+            .dsr {
+              background-color: #185892;
+            }
+            .uppercase {
+              text-transform: uppercase;
+            }
+            .small-text {
+              font-size: 0.625rem;
+              font-weight: bold;
+            }
+          </style>
+        </head>
+        <body>
+          <table role="table">
+            <thead>
+              <tr class="header">
+                <th colspan="8">Escala (${title.trim()}) ${periodScale}</th>
+              </tr>
+              <tr>
+                <th class="small-text" colspan="3">DIA DO MÊS</th>
+                ${sundays
+                  .map(
+                    (date, i) =>
+                      `<th class="small-text" key="${i}">${date}</th>`
                   )
-                  .join(" / ")
-              : dayjs().day(item.weekday).format("dddd").toUpperCase()
-          }</td>
-          <td class="turn small-text">${item.turn ? "MANHÃ" : "TARDE"}</td>
-          ${sundays
-            .map((sunday) => {
-              const isDSR = datesEvery28Days.includes(sunday);
-              const dsrWOMAN = item.woman
-                ? alternateDates.includes(sunday)
-                : false; // Verifica se woman é true
-              const isAllDSR = item.weekday.includes(0);
-
-              // Determina a classe e o texto a ser exibido
-              const isDsrToShow = isDSR || isAllDSR || dsrWOMAN; // Inclui dsrWOMAN na verificação
-              return `<td class="${isDsrToShow ? "dsr" : "work"} small-text">${
-                isDsrToShow ? "DSR" : "1"
-              }</td>`;
-            })
-            .join("")}
-          
-        </tr>
-            `;
-        })
-        .join("")}
-      </tbody>
-    </table>
-  </body>
-</html>
-  `;
+                  .join("")}
+              </tr>
+              <tr>
+                <th class="small-text">NOME</th>
+                <th class="small-text">FOLGA DA SEMANA</th>
+                <th class="small-text">TURNO</th>
+                <th class="small-text">DOM</th>
+                <th class="small-text">DOM</th>
+                <th class="small-text">DOM</th>
+                <th class="small-text">DOM</th>
+                <th class="small-text">DOM</th>
+              </tr>
+            </thead>
+            <tbody>
+            ${colaborators
+              .sort((a, b) => {
+                // Ordena primeiro por 'turn' (MANHÃ = true, TARDE = false)
+                return a.turn === b.turn ? 0 : a.turn ? -1 : 1;
+              })
+              .map((item, i) => {
+                const datesEvery28Days = getDatesEvery28Days(item.sunday);
+                const alternateDates = getAlternateSundays(item.sunday);
+                return `
+                  <tr key="${i}">
+                    <td class="uppercase small-text">${item.name}</td>
+                    <td class="day-off small-text">${
+                      Array.isArray(item.weekday)
+                        ? item.weekday
+                            .map((w) =>
+                              dayjs().day(w).format("dddd").toUpperCase()
+                            )
+                            .join(" / ")
+                        : dayjs().day(item.weekday).format("dddd").toUpperCase()
+                    }</td>
+                    <td class="turn small-text">${
+                      item.turn ? "MANHÃ" : "TARDE"
+                    }</td>
+                    ${sundays
+                      .map((sunday) => {
+                        const isDSR = datesEvery28Days.includes(sunday);
+                        const dsrWOMAN = item.woman
+                          ? alternateDates.includes(sunday)
+                          : false;
+                        const isAllDSR = item.weekday.includes(0);
+                        const isDsrToShow = isDSR || isAllDSR || dsrWOMAN;
+                        return `<td class="${
+                          isDsrToShow ? "dsr" : "work"
+                        } small-text">${isDsrToShow ? "DSR" : "1"}</td>`;
+                      })
+                      .join("")}
+                  </tr>
+                `;
+              })
+              .join("")}
+            </tbody>
+          </table>
+        </body>
+      </html>
+    `;
+  }, [colaborators, sundays, title, periodScale]);
 
   const print = async () => {
+    const html = generateHTML();
     await Print.printAsync({
       html,
       orientation: "landscape",
@@ -273,18 +268,16 @@ export default function EditablePage() {
                   data={colaborators}
                   scrollEnabled={false}
                   keyExtractor={(item) => item.name}
-                  renderItem={({ item }) => {
-                    return (
-                      <Colaborator
-                        name={item.name}
-                        turn={item.turn}
-                        woman={item.woman}
-                        sunday={item.sunday}
-                        selectedDays={item.weekday}
-                        onRemove={() => handleRemoveColaborator(item.name)}
-                      />
-                    );
-                  }}
+                  renderItem={({ item }) => (
+                    <ColaboratorMemo
+                      name={item.name}
+                      turn={item.turn}
+                      woman={item.woman}
+                      sunday={item.sunday}
+                      selectedDays={item.weekday}
+                      onRemove={() => handleRemoveColaborator(item.name)}
+                    />
+                  )}
                 />
                 {showColaboratorInput ? (
                   <View className="w-full overflow-hidden rounded-xl mb-2 bg-[#202024] divide-y-[1px] divide-[#323238] border border-[#323238]">
