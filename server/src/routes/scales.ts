@@ -68,6 +68,27 @@ export async function scaleRoutes(app: FastifyInstance) {
     }
   });
 
+  app.get('/scales/user/:userId', async (request, reply) => {
+    const userParams = z.object({
+      userId: z.string(),
+    });
+
+    try {
+      const { userId } = userParams.parse(request.params);
+      const scales = await prisma.scale.findMany({
+        where: {
+          user: userId,
+        },
+        include: {
+          colaborators: true,
+        },
+      });
+      reply.status(200).send(scales);
+    } catch (error) {
+      reply.status(500).send({ error: 'Erro ao listar as Scales do usuário' });
+    }
+  });
+
   app.get('/scales/:id', async (request, reply) => {
     const scaleParams = z.object({
       id: z.string(),
