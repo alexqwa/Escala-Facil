@@ -9,6 +9,7 @@ import { useMonthPair } from "@/src/hooks/useMonthPair";
 
 interface Scale {
   id: number;
+  user: string;
   year: string;
   title: string;
   month: string;
@@ -27,7 +28,8 @@ interface Colaborator {
 export function useScales(
   titleParams: string,
   monthParams: string,
-  yearParams: string
+  yearParams: string,
+  userIdentifier: string | undefined
 ) {
   // Estados para puxar dados das escalas
   const [scales, setScales] = useState<Scale[]>([]);
@@ -35,6 +37,7 @@ export function useScales(
   const [error, setError] = useState<string | null>(null);
 
   // Estados para as escalas
+  const [user, setUser] = useState(userIdentifier);
   const [year, setYear] = useState(yearParams);
   const [title, setTitle] = useState(titleParams);
   const [month, setMonth] = useState(monthParams);
@@ -75,6 +78,7 @@ export function useScales(
     setLoading(true);
 
     const scaleData: Omit<Scale, "id"> = {
+      user: user ?? "",
       title,
       month,
       year,
@@ -104,6 +108,7 @@ export function useScales(
     setLoading(true);
 
     const scaleData: Omit<Scale, "id"> = {
+      user: user ?? "",
       title,
       month,
       year,
@@ -178,6 +183,7 @@ export function useScales(
   }
 
   function resetInputs() {
+    setUser("");
     setTitle("");
     setMonth("");
     setYear("");
@@ -277,6 +283,7 @@ export function useScales(
     scales,
     loading,
     setYear,
+    setUser,
     setMonth,
     setTitle,
     weekdays,

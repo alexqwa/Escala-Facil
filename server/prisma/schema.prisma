@@ -9,6 +9,7 @@ datasource db {
 
 model Scale {
   id           Int           @id @default(autoincrement())
+  user         String
   title        String
   month        String
   year         String

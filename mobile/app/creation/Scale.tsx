@@ -14,6 +14,7 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 
+import { useUser } from "@clerk/clerk-expo";
 import { useScales } from "@/src/hooks/useScales";
 
 import { Day } from "@/src/components/Day";
@@ -24,6 +25,7 @@ import { Colaborator } from "@/src/components/Colaborator";
 
 export default function Scale() {
   const { titleParams, monthParams, yearParams } = useLocalSearchParams();
+  const { user } = useUser();
   const [show, setShow] = useState(false);
 
   const {
@@ -55,7 +57,8 @@ export default function Scale() {
   } = useScales(
     titleParams.toString(),
     monthParams.toString(),
-    yearParams.toString()
+    yearParams.toString(),
+    user?.id
   );
 
   const isDisabled = !title || !month || colaborators.length === 0 || loading;

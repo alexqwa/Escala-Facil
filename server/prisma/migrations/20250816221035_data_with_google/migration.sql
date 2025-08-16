@@ -1,6 +1,7 @@
 -- CreateTable
-CREATE TABLE "scales" (
+CREATE TABLE "public"."scales" (
     "id" SERIAL NOT NULL,
+    "user" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "month" TEXT NOT NULL,
     "year" TEXT NOT NULL,
@@ -10,7 +11,7 @@ CREATE TABLE "scales" (
 );
 
 -- CreateTable
-CREATE TABLE "colaborators" (
+CREATE TABLE "public"."colaborators" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "turn" BOOLEAN NOT NULL,
@@ -23,4 +24,4 @@ CREATE TABLE "colaborators" (
 );
 
 -- AddForeignKey
-ALTER TABLE "colaborators" ADD CONSTRAINT "colaborators_scaleId_fkey" FOREIGN KEY ("scaleId") REFERENCES "scales"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."colaborators" ADD CONSTRAINT "colaborators_scaleId_fkey" FOREIGN KEY ("scaleId") REFERENCES "public"."scales"("id") ON DELETE CASCADE ON UPDATE CASCADE;

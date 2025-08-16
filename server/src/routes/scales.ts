@@ -15,6 +15,7 @@ export async function scaleRoutes(app: FastifyInstance) {
     });
 
     const scaleSchema = z.object({
+      user: z.string().min(1, 'ID do usuário é obrigatório.'),
       title: z.string().min(1, 'Nome é obrigatório.'),
       month: z.string().min(1, 'Mês é obrigatório.'),
       year: z.string().min(1, 'Ano é obrigatório.'),
@@ -23,11 +24,12 @@ export async function scaleRoutes(app: FastifyInstance) {
     });
 
     try {
-      const { title, month, year, periodScale, colaborators } =
+      const { user, title, month, year, periodScale, colaborators } =
         scaleSchema.parse(request.body);
 
       const scale = await prisma.scale.create({
         data: {
+          user,
           title,
           month,
           year,
