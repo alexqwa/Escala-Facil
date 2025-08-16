@@ -1,10 +1,10 @@
-import { Stack } from "expo-router";
+import { useEffect } from "react";
 import { useFonts } from "expo-font";
-import React, { useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
-import { Platform, View } from "react-native";
+import { router, Stack } from "expo-router";
+import { Platform, StatusBar } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import * as NavigationBar from "expo-navigation-bar";
+import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import {
   Archivo_400Regular,
   Archivo_600SemiBold,
@@ -18,8 +18,36 @@ import {
 } from "@expo-google-fonts/poppins";
 
 import "@/src/lib/dayjs";
+import { tokenCache } from "@/src/storage/tokenCache";
 
 SplashScreen.preventAutoHideAsync();
+
+function AuthState() {
+  const { isLoaded, isSignedIn } = useAuth();
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    if (isSignedIn) {
+      router.replace({ pathname: "/(tabs)" });
+    } else {
+      router.replace({ pathname: "/(auth)" });
+    }
+  }, [isSignedIn]);
+
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="(auth)" />
+      <Stack.Screen name="creation/Scale" />
+      <StatusBar translucent barStyle={"light-content"} />
+    </Stack>
+  );
+}
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
@@ -47,19 +75,11 @@ export default function RootLayout() {
   }
 
   return (
-    <View className="flex-1 bg-[#121214]">
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            backgroundColor: "#121214",
-          },
-        }}
-      >
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="creation/Scale" />
-        <StatusBar translucent style="light" />
-      </Stack>
-    </View>
+    <ClerkProvider
+      publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      tokenCache={tokenCache}
+    >
+      <AuthState />
+    </ClerkProvider>
   );
 }

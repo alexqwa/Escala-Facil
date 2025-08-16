@@ -1,8 +1,17 @@
 import { useEffect } from "react";
 import { router } from "expo-router";
-import { View, Text, FlatList, ActivityIndicator } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 
 import { useScales } from "@/src/hooks/useScales";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 
 import { Header } from "@/src/components/Header";
 import { ScaleCard } from "@/src/components/ScaleCard";
@@ -13,6 +22,8 @@ export default function MyScales() {
     "",
     ""
   );
+  const { user } = useUser();
+  const { signOut } = useAuth();
 
   useEffect(() => {
     fetchScales();
@@ -22,6 +33,24 @@ export default function MyScales() {
     <View className="flex-1 bg-[#121214] items-center">
       <Header title="MINHAS ESCALAS" />
       <View className="max-w-[85%] w-full flex-1 mt-16">
+        <View className="bg-[#202024] p-4 rounded-xl flex-row items-center justify-between mb-6">
+          <View className="flex-row items-center">
+            <Image
+              source={{ uri: user?.imageUrl }}
+              className="w-12 h-12 rounded-xl"
+            />
+            <Text className="text-white font-poppins_600 text-base ml-3">
+              {user?.firstName}
+            </Text>
+          </View>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => signOut()}
+            className="bg-[#121214] rounded-xl w-12 h-12 items-center justify-center"
+          >
+            <Ionicons name="power" size={18} color="#fff" />
+          </TouchableOpacity>
+        </View>
         <Text className="text-white font-archivo_700 text-3xl mb-6">
           Minhas escalas
         </Text>

@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
-import { useState } from "react";
 import { router } from "expo-router";
-import { View, Text } from "react-native";
+import { View, Text, BackHandler } from "react-native";
+import { useState, useEffect } from "react";
 
 import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
@@ -13,6 +13,18 @@ export default function Home() {
   const [month, setMonth] = useState(String(dayjs().month() + 1));
 
   const isDisabled = !title || !month || !year;
+
+  useEffect(() => {
+    const backAction = () => {
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <View className="flex-1 items-center bg-[#121214]">
@@ -47,10 +59,6 @@ export default function Home() {
             })
           }
         />
-        <Text className="text-[#c4c4cc] font-poppins_400 text-sm mt-6 text-center">
-          Após gerar sua escala, você será redirecionado{"\n"}para tela onde
-          você poderá edita-la.
-        </Text>
       </View>
     </View>
   );
