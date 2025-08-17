@@ -1,10 +1,16 @@
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { router, Stack } from "expo-router";
-import { Platform, StatusBar } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import * as NavigationBar from "expo-navigation-bar";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
+import {
+  Text,
+  View,
+  Platform,
+  StatusBar,
+  ActivityIndicator,
+} from "react-native";
 import {
   Archivo_400Regular,
   Archivo_600SemiBold,
@@ -35,7 +41,7 @@ function AuthState() {
     }
   }, [isSignedIn]);
 
-  return (
+  return isLoaded ? (
     <Stack
       screenOptions={{
         headerShown: false,
@@ -44,8 +50,14 @@ function AuthState() {
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="(auth)" />
       <Stack.Screen name="creation/Scale" />
-      <StatusBar translucent barStyle={"light-content"} />
     </Stack>
+  ) : (
+    <View className="my-auto items-center justify-center flex-1 space-y-2">
+      <ActivityIndicator size="small" color="#fff" />
+      <Text className="text-white text-center text-base font-archivo_700 ">
+        Carregando escalas...
+      </Text>
+    </View>
   );
 }
 
@@ -80,6 +92,7 @@ export default function RootLayout() {
       tokenCache={tokenCache}
     >
       <AuthState />
+      <StatusBar translucent barStyle={"light-content"} />
     </ClerkProvider>
   );
 }

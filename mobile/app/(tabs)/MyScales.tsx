@@ -1,11 +1,12 @@
-import { useEffect } from "react";
 import { router } from "expo-router";
+import { useEffect, memo } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import {
   View,
   Text,
   Image,
   FlatList,
+  ScrollView,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
@@ -16,18 +17,23 @@ import { useAuth, useUser } from "@clerk/clerk-expo";
 import { Header } from "@/src/components/Header";
 import { ScaleCard } from "@/src/components/ScaleCard";
 
+const ScaleCardMemo = memo(ScaleCard);
+
 export default function MyScales() {
+  const { user, isLoaded } = useUser();
   const { scales, fetchScales, handleRemoveScale, loadingScale } = useScales(
+    "",
     "",
     "",
     ""
   );
-  const { user } = useUser();
   const { signOut } = useAuth();
 
   useEffect(() => {
-    fetchScales();
-  }, []);
+    if (isLoaded && user?.id) {
+      fetchScales(user.id);
+    }
+  }, [isLoaded, user?.id]);
 
   return (
     <View className="flex-1 bg-[#121214] items-center">
@@ -54,41 +60,47 @@ export default function MyScales() {
         <Text className="text-white font-archivo_700 text-3xl mb-6">
           Minhas escalas
         </Text>
-        <View className="space-y-6 flex-1">
-          {loadingScale ? (
-            <View className="my-auto items-center justify-center space-y-2">
-              <ActivityIndicator size="small" color="#fff" />
-              <Text className="text-white text-center text-base font-archivo_700 ">
-                Carregando escalas...
-              </Text>
-            </View>
-          ) : (
-            <FlatList
-              data={scales}
-              scrollEnabled={false}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => {
-                return (
-                  <ScaleCard
-                    key={item.id}
-                    title={item.title}
-                    periodScale={item.periodScale}
-                    colaborators={item.colaborators.length}
-                    onPress={() =>
-                      router.push({
-                        pathname: "/[id]",
-                        params: { id: item.id },
-                      })
-                    }
-                    onRemove={async () =>
-                      handleRemoveScale(item.id, item.title)
-                    }
-                  />
-                );
-              }}
-            />
-          )}
-        </View>
+        <ScrollView
+          className="flex-1 w-full"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 40 }}
+        >
+          <View className="space-y-6 flex-1">
+            {loadingScale ? (
+              <View className="my-auto items-center justify-center space-y-2">
+                <ActivityIndicator size="small" color="#fff" />
+                <Text className="text-white text-center text-base font-archivo_700 ">
+                  Carregando escalas...
+                </Text>
+              </View>
+            ) : (
+              <FlatList
+                data={scales}
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item }) => {
+                  return (
+                    <ScaleCardMemo
+                      key={item.id}
+                      title={item.title}
+                      periodScale={item.periodScale}
+                      colaborators={item.colaborators.length}
+                      onPress={() =>
+                        router.push({
+                          pathname: "/[id]",
+                          params: { id: item.id },
+                        })
+                      }
+                      onRemove={async () =>
+                        handleRemoveScale(item.id, item.title)
+                      }
+                    />
+                  );
+                }}
+              />
+            )}
+          </View>
+        </ScrollView>
       </View>
     </View>
   );

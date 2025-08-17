@@ -60,7 +60,7 @@ export default function EditablePage() {
     handleAddColaborator,
     setShowColaboratorInput,
     handleRemoveColaborator,
-  } = useScales("", "", "");
+  } = useScales("", "", "", "");
 
   useEffect(() => {
     fetchScaleById(Number(id));

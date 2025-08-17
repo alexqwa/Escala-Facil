@@ -1,10 +1,8 @@
-import { useEffect } from "react";
 import * as Linking from "expo-linking";
 import { useSSO } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
 import { View, Text, TouchableOpacity } from "react-native";
-import { router } from "expo-router";
 
 WebBrowser.maybeCompleteAuthSession();
 

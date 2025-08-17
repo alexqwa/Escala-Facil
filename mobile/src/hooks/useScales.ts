@@ -58,10 +58,17 @@ export function useScales(
     setPeriodScale(monthPair);
   }, [month]);
 
-  async function fetchScales() {
+  async function fetchScales(userId: string) {
+    if (!userId) {
+      setError("ID do usuário não disponível");
+      setLoadingScale(false);
+      return;
+    }
     try {
-      const response = await api.get<Scale[]>("/scales");
+      setLoadingScale(true);
+      const response = await api.get<Scale[]>(`/scales/user/${userId}`);
       setScales(response.data);
+      setError(null);
     } catch (error) {
       console.error("Erro ao buscar escalas!", error);
       setError("Erro ao buscar escalas. Tente novamente mais tarde.");
