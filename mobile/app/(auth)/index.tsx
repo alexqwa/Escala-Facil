@@ -11,7 +11,7 @@ export default function Auth() {
 
   async function onGoogleSignIn() {
     try {
-      const redirectUrl = Linking.createURL("(tabs)");
+      const redirectUrl = Linking.createURL("/");
 
       const oAuthFlow = await startSSOFlow({
         strategy: "oauth_google",

@@ -1,16 +1,10 @@
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
-import { router, Stack } from "expo-router";
+import { router, Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import * as NavigationBar from "expo-navigation-bar";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
-import {
-  Text,
-  View,
-  Platform,
-  StatusBar,
-  ActivityIndicator,
-} from "react-native";
+import { Platform, StatusBar, ActivityIndicator } from "react-native";
 import {
   Archivo_400Regular,
   Archivo_600SemiBold,
@@ -32,32 +26,18 @@ function AuthState() {
   const { isLoaded, isSignedIn } = useAuth();
 
   useEffect(() => {
-    if (!isLoaded) return;
-
-    if (isSignedIn) {
-      router.replace({ pathname: "/(tabs)" });
-    } else {
-      router.replace({ pathname: "/(auth)" });
+    if (isLoaded) {
+      router.replace({ pathname: isSignedIn ? "/(tabs)" : "/(auth)" });
     }
-  }, [isSignedIn]);
-
+  }, [isLoaded, isSignedIn]);
   return isLoaded ? (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="(auth)" />
-      <Stack.Screen name="creation/Scale" />
-    </Stack>
+    <Slot />
   ) : (
-    <View className="my-auto items-center justify-center flex-1 space-y-2">
-      <ActivityIndicator size="small" color="#fff" />
-      <Text className="text-white text-center text-base font-archivo_700 ">
-        Carregando escalas...
-      </Text>
-    </View>
+    <ActivityIndicator
+      size="small"
+      color="#fff"
+      className="flex-1 items-center justify-center"
+    />
   );
 }
 

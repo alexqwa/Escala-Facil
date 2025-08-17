@@ -63,43 +63,43 @@ export default function MyScales() {
         <ScrollView
           className="flex-1 w-full"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 40 }}
+          contentContainerStyle={{
+            paddingBottom: 40,
+          }}
         >
-          <View className="space-y-6 flex-1">
-            {loadingScale ? (
-              <View className="my-auto items-center justify-center space-y-2">
-                <ActivityIndicator size="small" color="#fff" />
-                <Text className="text-white text-center text-base font-archivo_700 ">
-                  Carregando escalas...
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                data={scales}
-                scrollEnabled={false}
-                showsVerticalScrollIndicator={false}
-                renderItem={({ item }) => {
-                  return (
-                    <ScaleCardMemo
-                      key={item.id}
-                      title={item.title}
-                      periodScale={item.periodScale}
-                      colaborators={item.colaborators.length}
-                      onPress={() =>
-                        router.push({
-                          pathname: "/[id]",
-                          params: { id: item.id },
-                        })
-                      }
-                      onRemove={async () =>
-                        handleRemoveScale(item.id, item.title)
-                      }
-                    />
-                  );
-                }}
-              />
-            )}
-          </View>
+          {loadingScale ? (
+            <View className="space-y-2 mt-20">
+              <ActivityIndicator size="small" color="#fff" />
+              <Text className="text-white text-center text-base font-archivo_700">
+                Carregando escalas...
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              data={scales}
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => {
+                return (
+                  <ScaleCardMemo
+                    key={item.id}
+                    title={item.title}
+                    periodScale={item.periodScale}
+                    colaborators={item.colaborators.length}
+                    onPress={() =>
+                      router.push({
+                        pathname: "/[id]",
+                        params: { id: item.id },
+                      })
+                    }
+                    onRemove={async () =>
+                      handleRemoveScale(item.id, item.title)
+                    }
+                  />
+                );
+              }}
+            />
+          )}
         </ScrollView>
       </View>
     </View>
