@@ -1,32 +1,28 @@
-import dayjs from "dayjs";
-import { useState } from "react";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { memo } from "react";
 import { useLocalSearchParams } from "expo-router";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   Text,
   View,
   Platform,
   FlatList,
-  TextInput,
   ScrollView,
-  TouchableOpacity,
   KeyboardAvoidingView,
 } from "react-native";
 
 import { useUser } from "@clerk/clerk-expo";
 import { useScales } from "@/src/hooks/useScales";
 
-import { Day } from "@/src/components/Day";
 import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
-import { Button } from "@/src/components/Button";
 import { Colaborator } from "@/src/components/Colaborator";
+import { ButtonPrimary } from "@/src/components/ButtonPrimary";
+import { ColaboratorInfo } from "@/src/components/ColaboratorInfo";
+
+const ColaboratorMemo = memo(Colaborator);
 
 export default function Scale() {
-  const { titleParams, monthParams, yearParams } = useLocalSearchParams();
   const { user } = useUser();
-  const [show, setShow] = useState(false);
+  const { titleParams, monthParams, yearParams } = useLocalSearchParams();
 
   const {
     year,
@@ -62,12 +58,6 @@ export default function Scale() {
   );
 
   const isDisabled = !title || !month || colaborators.length === 0 || loading;
-
-  const onChangeDate = (event: any, selectedDate?: Date) => {
-    const currentDate = selectedDate || colaboratorSunday;
-    setShow(false);
-    setColaboratorSunday(currentDate);
-  };
 
   return (
     <View className="flex-1 items-center bg-[#121214]">
@@ -108,10 +98,10 @@ export default function Scale() {
               <FlatList
                 data={colaborators}
                 scrollEnabled={false}
-                keyExtractor={(item) => item.name}
+                keyExtractor={(item, index) => item.name + index}
                 renderItem={({ item }) => {
                   return (
-                    <Colaborator
+                    <ColaboratorMemo
                       name={item.name}
                       turn={item.turn}
                       woman={item.woman}
@@ -123,110 +113,39 @@ export default function Scale() {
                 }}
               />
               {showColaboratorInput ? (
-                <View className="w-full overflow-hidden rounded-xl mb-2 bg-[#202024] divide-y-[1px] divide-[#323238] border border-[#323238]">
-                  <View className="h-14 flex-row flex-1 divide-x-[1px] divide-[#323238]">
-                    <TextInput
-                      autoFocus
-                      placeholder="Nome do colaborador"
-                      value={colaboratorName}
-                      onChangeText={setColaboratorName}
-                      className="flex-1 px-4 text-white font-archivo_600 text-base"
-                      placeholderTextColor="#E1E1E6"
-                      cursorColor="#fff"
-                    />
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      onPress={handleAddColaborator}
-                      className="w-14 items-center justify-center"
-                    >
-                      <Ionicons
-                        name="add-circle-outline"
-                        size={22}
-                        color="#fff"
-                      />
-                    </TouchableOpacity>
-                  </View>
-                  <View className="p-4">
-                    <View className="flex-row justify-between">
-                      {weekdays.map(({ day, initial }) => (
-                        <Day
-                          key={day}
-                          day={initial}
-                          isActive={isDaySelected(day)}
-                          onPress={() => toggleDay(day)}
-                        />
-                      ))}
-                    </View>
-                  </View>
-                  <View className="p-4 flex-row items-center space-x-2">
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      onPress={() => setColaboratorWoman(!colaboratorWoman)}
-                      className="bg-[#323238] flex-1 py-2 flex-row items-center space-x-2 justify-center rounded-lg"
-                    >
-                      <Ionicons
-                        name={colaboratorWoman ? "woman" : "man"}
-                        color="#fff"
-                        size={18}
-                      />
-                      <Text className="text-white font-archivo_600 text-sm">
-                        {colaboratorWoman ? "Mulher" : "Homem"}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      className="bg-[#323238] flex-1 py-2 flex-row items-center space-x-2 justify-center rounded-lg"
-                      onPress={() => setColaboratorTurn(!colaboratorTurn)}
-                    >
-                      <Ionicons
-                        name={colaboratorTurn ? "sunny" : "moon"}
-                        size={18}
-                        color="#fff"
-                      />
-                      <Text className="text-white font-archivo_600 text-sm">
-                        {colaboratorTurn ? "Manhã" : "Tarde"}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      className="bg-[#323238] flex-1 py-2 flex-row items-center justify-center rounded-lg"
-                      activeOpacity={0.7}
-                      onPress={() => setShow(true)}
-                    >
-                      {show && (
-                        <DateTimePicker
-                          is24Hour
-                          mode="date"
-                          display="calendar"
-                          value={colaboratorSunday}
-                          onChange={onChangeDate}
-                        />
-                      )}
-                      <Text className="text-white text-sm font-archivo_600">
-                        {dayjs(colaboratorSunday).format("DD/MM/YYYY")}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
+                <ColaboratorInfo
+                  weekdays={weekdays}
+                  toggleDay={toggleDay}
+                  isDaySelected={isDaySelected}
+                  colaboratorName={colaboratorName}
+                  colaboratorTurn={colaboratorTurn}
+                  colaboratorWoman={colaboratorWoman}
+                  colaboratorSunday={colaboratorSunday}
+                  setColaboratorName={setColaboratorName}
+                  setColaboratorTurn={setColaboratorTurn}
+                  setColaboratorWoman={setColaboratorWoman}
+                  setColaboratorSunday={setColaboratorSunday}
+                  handleAddColaborator={handleAddColaborator}
+                />
               ) : (
-                <Button
-                  isDark
-                  isLoading={false}
-                  title="Adicionar colaborador"
+                <ButtonPrimary
+                  disabled={false}
+                  icon="person-add"
                   onPress={() => setShowColaboratorInput(true)}
-                >
-                  <Feather name="plus-circle" size={18} color="#c6c6cc" />
-                </Button>
+                  title="ADICIONAR COLABORADOR"
+                  type={{ dark: true }}
+                  color="#fff"
+                />
               )}
             </View>
           </View>
 
           <View className="bg-[#202024] h-[1px] my-6 w-[80%] self-center" />
-          <Button
+          <ButtonPrimary
             isLoading={loading}
             title="GERAR ESCALA"
             disabled={isDisabled}
             onPress={handleSubmit}
-            isInactive={isDisabled}
           />
         </ScrollView>
       </KeyboardAvoidingView>

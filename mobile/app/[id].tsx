@@ -1,17 +1,13 @@
 import dayjs from "dayjs";
 import * as Print from "expo-print";
 import { useLocalSearchParams } from "expo-router";
-import { Feather, Ionicons } from "@expo/vector-icons";
-import { useEffect, useState, useCallback, memo } from "react";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import { useEffect, useCallback, memo } from "react";
 import {
   Text,
   View,
   Platform,
   FlatList,
-  TextInput,
   ScrollView,
-  TouchableOpacity,
   ActivityIndicator,
   KeyboardAvoidingView,
 } from "react-native";
@@ -19,17 +15,16 @@ import {
 import { useDates } from "@/src/hooks/useDates";
 import { useScales } from "@/src/hooks/useScales";
 
-import { Day } from "@/src/components/Day";
 import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
-import { Button } from "@/src/components/Button";
 import { Colaborator } from "@/src/components/Colaborator";
+import { ButtonPrimary } from "@/src/components/ButtonPrimary";
+import { ColaboratorInfo } from "@/src/components/ColaboratorInfo";
 
 const ColaboratorMemo = memo(Colaborator);
 
 export default function EditablePage() {
   const { id } = useLocalSearchParams();
-  const [show, setShow] = useState(false);
   const { nextSundaysAfter20th, getDatesEvery28Days, getAlternateSundays } =
     useDates();
   const {
@@ -67,12 +62,6 @@ export default function EditablePage() {
   }, [id]);
 
   const isDisabled = !title || !month || colaborators.length === 0;
-
-  const onChangeDate = (event: any, selectedDate?: Date) => {
-    const currentDate = selectedDate || colaboratorSunday;
-    setShow(false);
-    setColaboratorSunday(currentDate);
-  };
 
   const sundays = nextSundaysAfter20th(Number(year), Number(month));
 
@@ -237,7 +226,10 @@ export default function EditablePage() {
         >
           <ScrollView
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingTop: 60, paddingBottom: 100 }}
+            contentContainerStyle={{
+              paddingTop: 60,
+              paddingBottom: 100,
+            }}
           >
             <View className="space-y-4">
               <Form
@@ -258,135 +250,67 @@ export default function EditablePage() {
                   </Text>
                 </View>
               </View>
-              <View>
-                <View className="mb-2">
-                  <Text className="block text-sm font-archivo_700 text-white ml-2">
-                    Colaboradores
-                  </Text>
-                </View>
-                <FlatList
-                  data={colaborators}
-                  scrollEnabled={false}
-                  keyExtractor={(item) => item.name}
-                  renderItem={({ item }) => (
-                    <ColaboratorMemo
-                      name={item.name}
-                      turn={item.turn}
-                      woman={item.woman}
-                      sunday={item.sunday}
-                      selectedDays={item.weekday}
-                      onRemove={() => handleRemoveColaborator(item.name)}
-                    />
-                  )}
-                />
-                {showColaboratorInput ? (
-                  <View className="w-full overflow-hidden rounded-xl mb-2 bg-[#202024] divide-y-[1px] divide-[#323238] border border-[#323238]">
-                    <View className="h-14 flex-row flex-1 divide-x-[1px] divide-[#323238]">
-                      <TextInput
-                        autoFocus
-                        placeholder="Nome do colaborador"
-                        value={colaboratorName}
-                        onChangeText={setColaboratorName}
-                        className="flex-1 px-4 text-white font-archivo_600 text-base"
-                        placeholderTextColor="#E1E1E6"
-                        cursorColor="#fff"
-                      />
-                      <TouchableOpacity
-                        activeOpacity={0.7}
-                        onPress={handleAddColaborator}
-                        className="w-14 items-center justify-center"
-                      >
-                        <Ionicons
-                          name="add-circle-outline"
-                          size={22}
-                          color="#fff"
-                        />
-                      </TouchableOpacity>
-                    </View>
-                    <View className="p-4">
-                      <View className="flex-row justify-between">
-                        {weekdays.map(({ day, initial }) => (
-                          <Day
-                            key={day}
-                            day={initial}
-                            isActive={isDaySelected(day)}
-                            onPress={() => toggleDay(day)}
-                          />
-                        ))}
-                      </View>
-                    </View>
-                    <View className="p-4 flex-row items-center space-x-2">
-                      <TouchableOpacity
-                        activeOpacity={0.7}
-                        onPress={() => setColaboratorWoman(!colaboratorWoman)}
-                        className="bg-[#323238] flex-1 py-2 flex-row items-center space-x-2 justify-center rounded-lg"
-                      >
-                        <Ionicons
-                          name={colaboratorWoman ? "woman" : "man"}
-                          color="#fff"
-                          size={18}
-                        />
-                        <Text className="text-white font-archivo_600 text-sm">
-                          {colaboratorWoman ? "Mulher" : "Homem"}
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        activeOpacity={0.7}
-                        className="bg-[#323238] flex-1 py-2 flex-row items-center space-x-2 justify-center rounded-lg"
-                        onPress={() => setColaboratorTurn(!colaboratorTurn)}
-                      >
-                        <Ionicons
-                          name={colaboratorTurn ? "sunny" : "moon"}
-                          size={18}
-                          color="#fff"
-                        />
-                        <Text className="text-white font-archivo_600 text-sm">
-                          {colaboratorTurn ? "Manhã" : "Tarde"}
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        className="bg-[#323238] flex-1 py-2 flex-row items-center justify-center rounded-lg"
-                        activeOpacity={0.7}
-                        onPress={() => setShow(true)}
-                      >
-                        {show && (
-                          <DateTimePicker
-                            is24Hour
-                            mode="date"
-                            display="calendar"
-                            value={colaboratorSunday}
-                            onChange={onChangeDate}
-                          />
-                        )}
-                        <Text className="text-white text-sm font-archivo_600">
-                          {dayjs(colaboratorSunday).format("DD/MM/YYYY")}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                ) : (
-                  <Button
-                    isDark
-                    isLoading={false}
-                    title="Adicionar colaborador"
-                    onPress={() => setShowColaboratorInput(true)}
-                  >
-                    <Feather name="plus-circle" size={18} color="#c6c6cc" />
-                  </Button>
-                )}
-              </View>
             </View>
+            <View className="mb-2 mt-4">
+              <Text className="block text-sm font-archivo_700 text-white ml-2">
+                Colaboradores
+              </Text>
+            </View>
+            <FlatList
+              data={colaborators}
+              scrollEnabled={false}
+              keyExtractor={(item, index) => item.name + index}
+              renderItem={({ item }) => (
+                <ColaboratorMemo
+                  name={item.name}
+                  turn={item.turn}
+                  woman={item.woman}
+                  sunday={item.sunday}
+                  selectedDays={item.weekday}
+                  onRemove={() => handleRemoveColaborator(item.name)}
+                />
+              )}
+            />
+            {showColaboratorInput ? (
+              <ColaboratorInfo
+                weekdays={weekdays}
+                toggleDay={toggleDay}
+                isDaySelected={isDaySelected}
+                colaboratorName={colaboratorName}
+                colaboratorTurn={colaboratorTurn}
+                colaboratorWoman={colaboratorWoman}
+                colaboratorSunday={colaboratorSunday}
+                setColaboratorName={setColaboratorName}
+                setColaboratorTurn={setColaboratorTurn}
+                setColaboratorWoman={setColaboratorWoman}
+                setColaboratorSunday={setColaboratorSunday}
+                handleAddColaborator={handleAddColaborator}
+              />
+            ) : (
+              <ButtonPrimary
+                color="#fff"
+                disabled={false}
+                type={{ dark: true }}
+                icon="person-add-sharp"
+                title="ADICIONAR COLABORADOR"
+                onPress={() => setShowColaboratorInput(true)}
+              />
+            )}
 
             <View className="bg-[#202024] h-[1px] my-6 w-[80%] self-center" />
-            <View className="space-y-4">
-              <Button isDark title="GERAR PDF" onPress={print}>
-                <Feather name="file-text" size={18} color="#fff" />
-              </Button>
-              <Button
-                isChange
+            <View className="space-y-2">
+              <ButtonPrimary
+                color="#fff"
+                icon="document"
+                onPress={print}
+                disabled={false}
+                title="GERAR PDF"
+                type={{ dark: true }}
+              />
+              <ButtonPrimary
                 isLoading={loading}
-                disabled={isDisabled || loading}
-                isInactive={isDisabled || loading}
+                disabled={isDisabled}
+                type={{ yellow: true }}
                 title="SALVAR ALTERAÇÕES"
                 onPress={() => handleUpdate(Number(id))}
               />

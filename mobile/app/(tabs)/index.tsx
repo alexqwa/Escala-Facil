@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
 import { router } from "expo-router";
-import { View, Text, BackHandler } from "react-native";
 import { useState, useEffect } from "react";
+import { View, Text, BackHandler } from "react-native";
 
 import { Form } from "@/src/components/Form";
 import { Header } from "@/src/components/Header";
-import { Button } from "@/src/components/Button";
+import { ButtonPrimary } from "@/src/components/ButtonPrimary";
 
 export default function Home() {
   const [title, setTitle] = useState("");
@@ -43,11 +43,10 @@ export default function Home() {
           onChangeTitle={setTitle}
         />
         <View className="mt-6" />
-        <Button
-          isChange
+        <ButtonPrimary
           title="GERAR ESCALA"
           disabled={isDisabled}
-          isInactive={isDisabled}
+          type={{ yellow: true }}
           onPress={() =>
             router.push({
               pathname: "/creation/Scale",
