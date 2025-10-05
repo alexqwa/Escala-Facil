@@ -113,7 +113,7 @@ export default function EditablePage() {
               width: 75px;
             }
             .work {
-              background-color: #2f75b5;
+              background-color: #f2f2f2;
             }
             .dsr {
               background-color: #185892;
