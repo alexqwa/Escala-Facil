@@ -35,12 +35,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.13.0
- * Query Engine version: 361e86d0ea4987e9f53a565309b3eed797a6bcbd
+ * Prisma Client JS version: 6.17.0
+ * Query Engine version: c0aafc03b8ef6cdced8654b9a817999e02457d6a
  */
 Prisma.prismaVersion = {
-  client: "6.13.0",
-  engine: "361e86d0ea4987e9f53a565309b3eed797a6bcbd"
+  client: "6.17.0",
+  engine: "c0aafc03b8ef6cdced8654b9a817999e02457d6a"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -159,12 +159,13 @@ const config = {
     "schemaEnvPath": "../../../../.env"
   },
   "relativePath": "../../..",
-  "clientVersion": "6.13.0",
-  "engineVersion": "361e86d0ea4987e9f53a565309b3eed797a6bcbd",
+  "clientVersion": "6.17.0",
+  "engineVersion": "c0aafc03b8ef6cdced8654b9a817999e02457d6a",
   "datasourceNames": [
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -175,7 +176,7 @@ const config = {
   },
   "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"app/generated/prisma-client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Scale {\n  id           Int           @id @default(autoincrement())\n  user         String\n  title        String\n  month        String\n  year         String\n  periodScale  String\n  colaborators Colaborator[]\n\n  @@map(\"scales\")\n}\n\nmodel Colaborator {\n  id      Int      @id @default(autoincrement())\n  name    String\n  turn    Boolean\n  woman   Boolean\n  sunday  DateTime @default(now())\n  weekday Int[]\n  scaleId Int\n  scale   Scale    @relation(fields: [scaleId], references: [id], onDelete: Cascade)\n\n  @@map(\"colaborators\")\n}\n",
   "inlineSchemaHash": "c7213054e49d78036b9661589890bd324a0afce74d8c162e5c721435461f269f",
-  "copyEngine": true
+  "copyEngine": false
 }
 config.dirname = '/'
 
