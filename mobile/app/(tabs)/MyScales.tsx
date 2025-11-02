@@ -45,7 +45,10 @@ export default function MyScales() {
               source={{ uri: user?.imageUrl }}
               className="w-12 h-12 rounded-xl"
             />
-            <Text className="text-white font-poppins_600 text-base ml-3">
+            <Text
+              allowFontScaling={false}
+              className="text-white font-poppins_600 text-base ml-3"
+            >
               {user?.firstName}
             </Text>
           </View>
@@ -57,7 +60,10 @@ export default function MyScales() {
             <Ionicons name="power" size={18} color="#fff" />
           </TouchableOpacity>
         </View>
-        <Text className="text-white font-archivo_700 text-3xl mb-6">
+        <Text
+          allowFontScaling={false}
+          className="text-white font-archivo_700 text-3xl mb-6"
+        >
           Minhas escalas
         </Text>
         <ScrollView
@@ -70,7 +76,10 @@ export default function MyScales() {
           {loadingScale ? (
             <View className="space-y-2 mt-20">
               <ActivityIndicator size="small" color="#fff" />
-              <Text className="text-white text-center text-base font-archivo_700">
+              <Text
+                allowFontScaling={false}
+                className="text-white text-center text-base font-archivo_700"
+              >
                 Carregando escalas...
               </Text>
             </View>

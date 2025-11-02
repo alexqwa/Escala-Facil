@@ -56,6 +56,7 @@ export function ButtonPrimary({
         >
           <Ionicons name={icon} size={20} color={color} />
           <Text
+            allowFontScaling={false}
             className={clsx("text-white uppercase text-base font-archivo_600", {
               ["text-black"]: type?.yellow,
             })}

@@ -41,14 +41,20 @@ export default function Auth() {
             <Text className="text-white font-poppins_700 text-xl">
               Escala Fácil
             </Text>
-            <Text className="text-white/80 font-poppins_400 text-sm text-center">
+            <Text
+              allowFontScaling={false}
+              className="text-white/80 font-poppins_400 text-sm text-center"
+            >
               Organize suas escalas de trabalho em segundos. Entre com sua conta
               Google.
             </Text>
           </View>
           <View className="flex-row items-center mt-8">
             <View className="h-[1px] bg-[#323238] flex-1" />
-            <Text className="mx-4 text-white/70 text-sm font-poppins_500">
+            <Text
+              allowFontScaling={false}
+              className="mx-4 text-white/70 text-sm font-poppins_500"
+            >
               Somente Google
             </Text>
             <View className="h-[1px] bg-[#323238] flex-1" />
@@ -59,14 +65,26 @@ export default function Auth() {
             className="bg-[#121214] w-full mt-4 rounded-lg flex-row items-center justify-center space-x-3 py-5"
           >
             <Ionicons name="logo-google" size={20} color="#fff" />
-            <Text className="text-white/80 font-archivo_700 text-base">
+            <Text
+              allowFontScaling={false}
+              className="text-white/80 font-archivo_700 text-base"
+            >
               Entrar com Google
             </Text>
           </TouchableOpacity>
-          <Text className="text-white/80 font-poppins_400 text-sm text-center mt-4">
+          <Text
+            allowFontScaling={false}
+            className="text-white/80 font-poppins_400 text-sm text-center mt-4"
+          >
             Ao entrar, você aceita os{" "}
-            <Text className="underline">Termos de Serviço</Text> e a{" "}
-            <Text className="underline">Política de Privacidade</Text> do app.
+            <Text allowFontScaling={false} className="underline">
+              Termos de Serviço
+            </Text>{" "}
+            e a{" "}
+            <Text allowFontScaling={false} className="underline">
+              Política de Privacidade
+            </Text>{" "}
+            do app.
           </Text>
         </View>
       </View>

@@ -19,7 +19,12 @@ export function Header({ title, back }: HeaderProps) {
             <Feather name="arrow-left" size={18} color="#fff" />
           </TouchableOpacity>
         ) : null}
-        <Text className="text-white font-archivo_700 text-base">{title}</Text>
+        <Text
+          allowFontScaling={false}
+          className="text-white font-archivo_700 text-base"
+        >
+          {title}
+        </Text>
       </View>
     </View>
   );

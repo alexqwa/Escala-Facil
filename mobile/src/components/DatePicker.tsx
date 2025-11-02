@@ -30,7 +30,10 @@ export function DatePicker() {
           onChange={onChange}
         />
       )}
-      <Text className="text-white text-base font-archivo_600">
+      <Text
+        allowFontScaling={false}
+        className="text-white text-base font-archivo_600"
+      >
         {dayjs(date).format("DD/MM/YYYY")}
       </Text>
     </TouchableOpacity>

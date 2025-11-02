@@ -20,7 +20,10 @@ export function Form({
   return (
     <View className="space-y-4">
       <View className="space-y-2">
-        <Text className="block text-sm font-archivo_700 text-white ml-2">
+        <Text
+          allowFontScaling={false}
+          className="block text-sm font-archivo_700 text-white ml-2"
+        >
           Título
         </Text>
         <TextInput
@@ -34,11 +37,15 @@ export function Form({
       </View>
       <View className="flex-row w-full space-x-4">
         <View className="flex-1 space-y-2">
-          <Text className="block text-sm font-archivo_700 text-white ml-2">
+          <Text
+            allowFontScaling={false}
+            className="block text-sm font-archivo_700 text-white ml-2"
+          >
             Mês
           </Text>
           <TextInput
             value={month}
+            allowFontScaling={false}
             onChangeText={onChangeMonth}
             className="input-custom w-full bg-[#202024] h-14 rounded-xl px-4 border-2 border-[#202024] text-white text-base font-archivo_600 focus:border-2 focus:border-[#323238] transition-all delay-300"
             placeholder="Mês de referência"
@@ -50,11 +57,15 @@ export function Form({
         </View>
 
         <View className="flex-1 space-y-2">
-          <Text className="block text-sm font-archivo_700 text-white ml-2">
+          <Text
+            allowFontScaling={false}
+            className="block text-sm font-archivo_700 text-white ml-2"
+          >
             Ano
           </Text>
           <TextInput
             value={year}
+            allowFontScaling={false}
             onChangeText={onChangeYear}
             className="input-custom w-full bg-[#202024] h-14 rounded-xl px-4 border-2 border-[#202024] text-white text-base font-archivo_600 focus:border-2 focus:border-[#323238] transition-all delay-300"
             placeholder="Ano de referência"

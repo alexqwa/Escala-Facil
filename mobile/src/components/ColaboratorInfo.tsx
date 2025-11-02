@@ -49,6 +49,7 @@ export function ColaboratorInfo({
         <TextInput
           autoFocus
           value={colaboratorName}
+          allowFontScaling={false}
           onChangeText={setColaboratorName}
           className="flex-1 font-archivo_600 text-base px-4 text-white"
           placeholder="Nome do colaborador"
@@ -84,7 +85,10 @@ export function ColaboratorInfo({
             color="#fff"
             size={18}
           />
-          <Text className="text-white font-archivo_600 text-sm">
+          <Text
+            allowFontScaling={false}
+            className="text-white font-archivo_600 text-sm"
+          >
             {colaboratorWoman ? "Mulher" : "Homem"}
           </Text>
         </TouchableOpacity>
@@ -98,7 +102,10 @@ export function ColaboratorInfo({
             size={18}
             color="#fff"
           />
-          <Text className="text-white font-archivo_600 text-sm">
+          <Text
+            allowFontScaling={false}
+            className="text-white font-archivo_600 text-sm"
+          >
             {colaboratorTurn ? "Manhã" : "Tarde"}
           </Text>
         </TouchableOpacity>
@@ -116,7 +123,10 @@ export function ColaboratorInfo({
               onChange={onChangeDate}
             />
           )}
-          <Text className="text-white text-sm font-archivo_600">
+          <Text
+            allowFontScaling={false}
+            className="text-white text-sm font-archivo_600"
+          >
             {dayjs(colaboratorSunday).format("DD/MM/YYYY")}
           </Text>
         </TouchableOpacity>

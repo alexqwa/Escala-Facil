@@ -19,6 +19,7 @@ export function Day({ day, isActive, ...rest }: DayProps) {
       )}
     >
       <Text
+        allowFontScaling={false}
         className={clsx("text-white font-poppins_700 text-sm", {
           ["text-black"]: isActive,
         })}

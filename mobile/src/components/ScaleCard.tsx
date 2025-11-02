@@ -23,17 +23,30 @@ export function ScaleCard({
   return (
     <View className="bg-[#202024] rounded-xl flex-row overflow-hidden mb-4">
       <View className="space-y-4 p-4 flex-1">
-        <Text className="text-base font-archivo_700 uppercase text-white">
+        <Text
+          allowFontScaling={false}
+          className="text-base font-archivo_700 uppercase text-white"
+        >
           {title}
         </Text>
         <View className="flex-row space-x-4 items-center">
           <View className="flex-row items-center space-x-2">
             <Feather name="calendar" color="#fff" size={16} />
-            <Text className="text-white font-archivo_600">{periodScale}</Text>
+            <Text
+              allowFontScaling={false}
+              className="text-white font-archivo_600"
+            >
+              {periodScale}
+            </Text>
           </View>
           <View className="flex-row items-center space-x-2">
             <Feather name="user" size={16} color="#fff" />
-            <Text className="text-white font-archivo_600">{colaborators}</Text>
+            <Text
+              allowFontScaling={false}
+              className="text-white font-archivo_600"
+            >
+              {colaborators}
+            </Text>
           </View>
         </View>
       </View>

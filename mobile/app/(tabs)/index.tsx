@@ -30,7 +30,10 @@ export default function Home() {
     <View className="flex-1 items-center bg-[#121214]">
       <Header title="GERAR ESCALA" />
       <View className="max-w-[85%] w-full flex-1 mt-20">
-        <Text className="text-white font-archivo_700 text-xl mb-10">
+        <Text
+          allowFontScaling={false}
+          className="text-white font-archivo_700 text-xl mb-10"
+        >
           Faça suas escalas sem complicações.{"\n"}Rápido, prático e de forma
           {"\n"}inteligente!
         </Text>

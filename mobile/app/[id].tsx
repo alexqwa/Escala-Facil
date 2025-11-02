@@ -215,7 +215,10 @@ export default function EditablePage() {
       {loadingScale ? (
         <View className="my-auto space-y-3">
           <ActivityIndicator size="small" color="#fff" />
-          <Text className="text-white text-base font-archivo_700">
+          <Text
+            allowFontScaling={false}
+            className="text-white text-base font-archivo_700"
+          >
             Carregando informações...
           </Text>
         </View>
@@ -241,18 +244,27 @@ export default function EditablePage() {
                 onChangeMonth={setMonth}
               />
               <View className="space-y-2">
-                <Text className="block text-sm font-archivo_700 text-white ml-2">
+                <Text
+                  allowFontScaling={false}
+                  className="block text-sm font-archivo_700 text-white ml-2"
+                >
                   Período da escala
                 </Text>
                 <View className="w-full bg-[#202024] h-14 rounded-xl px-4 justify-center">
-                  <Text className="text-[#E1E1E6] font-archivo_600 text-base">
+                  <Text
+                    allowFontScaling={false}
+                    className="text-[#E1E1E6] font-archivo_600 text-base"
+                  >
                     {periodScale}
                   </Text>
                 </View>
               </View>
             </View>
             <View className="mb-2 mt-4">
-              <Text className="block text-sm font-archivo_700 text-white ml-2">
+              <Text
+                allowFontScaling={false}
+                className="block text-sm font-archivo_700 text-white ml-2"
+              >
                 Colaboradores
               </Text>
             </View>
