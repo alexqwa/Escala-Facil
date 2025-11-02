@@ -38,7 +38,10 @@ export default function Auth() {
             <Ionicons name="calendar-number-outline" size={32} color="#fff" />
           </View>
           <View className="space-y-2 items-center mt-4">
-            <Text className="text-white font-poppins_700 text-xl">
+            <Text
+              allowFontScaling={false}
+              className="text-white font-poppins_700 text-xl"
+            >
               Escala Fácil
             </Text>
             <Text

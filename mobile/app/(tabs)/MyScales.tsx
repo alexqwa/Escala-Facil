@@ -62,7 +62,7 @@ export default function MyScales() {
         </View>
         <Text
           allowFontScaling={false}
-          className="text-white font-archivo_700 text-3xl mb-6"
+          className="text-white font-archivo_700 text-xl mb-6"
         >
           Minhas escalas
         </Text>

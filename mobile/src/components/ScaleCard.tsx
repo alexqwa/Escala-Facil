@@ -34,7 +34,7 @@ export function ScaleCard({
             <Feather name="calendar" color="#fff" size={16} />
             <Text
               allowFontScaling={false}
-              className="text-white font-archivo_600"
+              className="text-white text-base font-archivo_600"
             >
               {periodScale}
             </Text>
@@ -43,7 +43,7 @@ export function ScaleCard({
             <Feather name="user" size={16} color="#fff" />
             <Text
               allowFontScaling={false}
-              className="text-white font-archivo_600"
+              className="text-white text-base font-archivo_600"
             >
               {colaborators}
             </Text>
