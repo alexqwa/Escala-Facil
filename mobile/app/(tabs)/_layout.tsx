@@ -38,6 +38,7 @@ export default function TabsLayout() {
         name="Home"
         options={{
           title: "Início",
+          tabBarAllowFontScaling: false,
           tabBarIcon: ({ color }) => {
             return <Feather size={18} name="plus-circle" color={color} />;
           },
@@ -49,6 +50,7 @@ export default function TabsLayout() {
         name="MyScales"
         options={{
           title: "Minhas escalas",
+          tabBarAllowFontScaling: false,
           tabBarIcon: ({ color }) => {
             return <Feather size={18} name="map" color={color} />;
           },
