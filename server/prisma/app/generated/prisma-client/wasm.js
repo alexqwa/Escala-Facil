@@ -155,7 +155,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../../.env"
   },
   "relativePath": "../../..",
@@ -165,7 +165,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -176,13 +175,20 @@ const config = {
   },
   "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"app/generated/prisma-client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Scale {\n  id           Int           @id @default(autoincrement())\n  user         String\n  title        String\n  month        String\n  year         String\n  periodScale  String\n  colaborators Colaborator[]\n\n  @@map(\"scales\")\n}\n\nmodel Colaborator {\n  id      Int      @id @default(autoincrement())\n  name    String\n  turn    Boolean\n  woman   Boolean\n  sunday  DateTime @default(now())\n  weekday Int[]\n  scaleId Int\n  scale   Scale    @relation(fields: [scaleId], references: [id], onDelete: Cascade)\n\n  @@map(\"colaborators\")\n}\n",
   "inlineSchemaHash": "c7213054e49d78036b9661589890bd324a0afce74d8c162e5c721435461f269f",
-  "copyEngine": false
+  "copyEngine": true
 }
 config.dirname = '/'
 
 config.runtimeDataModel = JSON.parse("{\"models\":{\"Scale\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"month\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"year\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"periodScale\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"colaborators\",\"kind\":\"object\",\"type\":\"Colaborator\",\"relationName\":\"ColaboratorToScale\"}],\"dbName\":\"scales\"},\"Colaborator\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"turn\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"woman\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"sunday\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"weekday\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"scaleId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"scale\",\"kind\":\"object\",\"type\":\"Scale\",\"relationName\":\"ColaboratorToScale\"}],\"dbName\":\"colaborators\"}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
-config.engineWasm = undefined
+config.engineWasm = {
+  getRuntime: async () => require('./query_engine_bg.js'),
+  getQueryEngineWasmModule: async () => {
+    const loader = (await import('#wasm-engine-loader')).default
+    const engine = (await loader).default
+    return engine
+  }
+}
 config.compilerWasm = undefined
 
 config.injectableEdgeEnv = () => ({

@@ -155,7 +155,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../../.env"
   },
   "relativePath": "../../..",
@@ -165,7 +165,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -176,7 +175,7 @@ const config = {
   },
   "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"app/generated/prisma-client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Scale {\n  id           Int           @id @default(autoincrement())\n  user         String\n  title        String\n  month        String\n  year         String\n  periodScale  String\n  colaborators Colaborator[]\n\n  @@map(\"scales\")\n}\n\nmodel Colaborator {\n  id      Int      @id @default(autoincrement())\n  name    String\n  turn    Boolean\n  woman   Boolean\n  sunday  DateTime @default(now())\n  weekday Int[]\n  scaleId Int\n  scale   Scale    @relation(fields: [scaleId], references: [id], onDelete: Cascade)\n\n  @@map(\"colaborators\")\n}\n",
   "inlineSchemaHash": "c7213054e49d78036b9661589890bd324a0afce74d8c162e5c721435461f269f",
-  "copyEngine": false
+  "copyEngine": true
 }
 config.dirname = '/'
 
