@@ -12,15 +12,15 @@ export function Day({ day, isActive, ...rest }: DayProps) {
       {...rest}
       activeOpacity={0.7}
       className={clsx(
-        "w-8 h-8 bg-[#323238] rounded-lg items-center justify-center",
+        "w-8 h-8 bg-muted rounded-lg items-center justify-center",
         {
-          ["bg-[#F7DD43]"]: isActive,
+          ["bg-foreground"]: isActive,
         }
       )}
     >
       <Text
         allowFontScaling={false}
-        className={clsx("text-white font-poppins_700 text-sm", {
+        className={clsx("text-foreground font-archivo_700 text-sm", {
           ["text-black"]: isActive,
         })}
       >

@@ -33,7 +33,8 @@
       "expo-router",
       "expo-font",
       "react-native-edge-to-edge",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

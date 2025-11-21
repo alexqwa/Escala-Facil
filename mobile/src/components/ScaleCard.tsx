@@ -8,34 +8,54 @@ import {
 
 interface ScaleCardProps extends TouchableOpacityProps {
   title: string;
-  onRemove: () => Promise<void>;
+  period: string;
+  onEdit?: () => void;
+  onDelete?: () => Promise<void>;
 }
 
-export function ScaleCard({ title, onRemove, ...rest }: ScaleCardProps) {
+export function ScaleCard({ title, period, onEdit, onDelete }: ScaleCardProps) {
   return (
-    <View className="bg-[#202024] rounded-xl py-3 flex-row overflow-hidden mb-4">
-      <View className="space-y-4 p-4 flex-1">
+    <View className="bg-muted mb-4 border-border border rounded-2xl w-full divide-y overflow-hidden divide-border">
+      <View className="p-4">
         <Text
           allowFontScaling={false}
-          className="text-base font-archivo_700 uppercase text-white"
+          className="text-foreground text-xl font-archivo_700"
         >
           {title}
         </Text>
-      </View>
-      <View className="flex-row space-x-3 mr-4 items-center">
-        <TouchableOpacity
-          {...rest}
-          activeOpacity={0.7}
-          className="items-center bg-[#121214] h-12 w-12 rounded-xl justify-center"
+        <Text
+          allowFontScaling={false}
+          className="text-muted_foreground font-archivo_600 text-sm"
         >
-          <Feather name="edit" size={18} color="#fff" />
+          {period}
+        </Text>
+      </View>
+      <View className="flex-row items-center justify-center space-x-4 p-4">
+        <TouchableOpacity
+          onPress={onEdit}
+          activeOpacity={0.8}
+          className="flex-1 bg-foreground flex-row items-center justify-center space-x-2 p-4 rounded-lg"
+        >
+          <Feather name="edit-2" size={20} color="#0a0a0a" />
+          <Text
+            allowFontScaling={false}
+            className="text-background text-sm font-archivo_600"
+          >
+            Editar
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={onRemove}
-          className="items-center bg-[#121214] h-12 w-12 rounded-xl justify-center"
+          onPress={onDelete}
+          activeOpacity={0.8}
+          className="flex-1 bg-card border-border border flex-row items-center justify-center space-x-2 p-4 rounded-lg"
         >
-          <Feather name="trash-2" size={18} color="#fff" />
+          <Feather name="trash-2" size={20} color="#ededed" />
+          <Text
+            allowFontScaling={false}
+            className="text-[#ededed] font-archivo_600 text-sm"
+          >
+            Excluir
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

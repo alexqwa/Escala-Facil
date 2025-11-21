@@ -27,7 +27,7 @@ function AuthState() {
 
   useEffect(() => {
     if (isLoaded) {
-      router.replace({ pathname: isSignedIn ? "/(tabs)" : "/(auth)" });
+      router.replace({ pathname: isSignedIn ? "/(private)" : "/(public)" });
     }
   }, [isLoaded, isSignedIn]);
   return isLoaded ? (

@@ -22,15 +22,35 @@ export function useDates() {
     return sundays;
   };
 
-  function getDatesEvery28Days(startDate: Date, count = 30) {
-    // Parse the start date using dayjs (make sure dayjs is imported)
-    let currentDate = dayjs(startDate, "DD/MM/YYYY");
-    const result = [];
+  // function getDatesEvery28Days(startDate: Date, count = 30) {
+  //   // Parse the start date using dayjs (make sure dayjs is imported)
+  //   let currentDate = dayjs(startDate, "DD/MM/YYYY");
+  //   const result = [];
 
-    for (let i = 0; i < count; i++) {
-      // Add the current date to results in DD/MM/YYYY format
+  //   for (let i = 0; i < count; i++) {
+  //     // Add the current date to results in DD/MM/YYYY format
+  //     result.push(currentDate.format("DD/MM/YYYY"));
+  //     // Add 27 days to the current date
+  //     currentDate = currentDate.add(28, "days");
+  //   }
+
+  //   return result;
+  // }
+
+  function getDatesEvery28Days(startDate: Date, year?: string) {
+    // Usa o ano fornecido ou o ano atual
+    const targetYear = year ? parseInt(year) : dayjs().year();
+    const endOfYear = dayjs(`${targetYear}-12-31`, "YYYY-MM-DD"); // Último dia do ano
+
+    let currentDate = dayjs(startDate);
+    const result: string[] = [];
+
+    // Gera datas até o final do ano
+    while (
+      currentDate.isBefore(endOfYear) ||
+      currentDate.isSame(endOfYear, "day")
+    ) {
       result.push(currentDate.format("DD/MM/YYYY"));
-      // Add 27 days to the current date
       currentDate = currentDate.add(28, "days");
     }
 

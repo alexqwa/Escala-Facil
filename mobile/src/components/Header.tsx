@@ -9,14 +9,14 @@ interface HeaderProps {
 
 export function Header({ title, back }: HeaderProps) {
   return (
-    <View className="w-full items-center justify-center bg-[#202024] py-12 z-50">
+    <View className="w-full items-center justify-center bg-muted border-b border-border pt-16 pb-6 z-50">
       <View className="relative max-w-[85%] w-full items-center justify-center mt-4">
         {back ? (
           <TouchableOpacity
             className="absolute left-0"
             onPress={() => router.back()}
           >
-            <Feather name="arrow-left" size={18} color="#fff" />
+            <Feather name="arrow-left" size={24} color="#fff" />
           </TouchableOpacity>
         ) : null}
         <Text

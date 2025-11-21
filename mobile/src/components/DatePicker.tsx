@@ -4,8 +4,8 @@ import { Text, TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 export function DatePicker() {
-  const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
+  const [date, setDate] = useState(new Date());
 
   const onChange = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
@@ -13,13 +13,11 @@ export function DatePicker() {
     setDate(currentDate);
   };
 
-  console.log(date);
-
   return (
     <TouchableOpacity
-      className="px-3 border-l border-[#323238] items-center justify-center"
       activeOpacity={0.7}
       onPress={() => setShow(true)}
+      className="items-center bg-muted rounded-lg flex-1 py-2 justify-center"
     >
       {show && (
         <DateTimePicker
@@ -32,7 +30,7 @@ export function DatePicker() {
       )}
       <Text
         allowFontScaling={false}
-        className="text-white text-base font-archivo_600"
+        className="text-foreground text-sm font-archivo_700"
       >
         {dayjs(date).format("DD/MM/YYYY")}
       </Text>
