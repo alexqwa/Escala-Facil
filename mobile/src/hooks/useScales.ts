@@ -25,7 +25,7 @@ interface Colaborator {
   schedule: boolean;
 }
 
-export function useCalaborators() {
+export function useScales() {
   // Estados para as escalas
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(true);

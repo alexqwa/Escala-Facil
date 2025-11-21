@@ -11,7 +11,7 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 
-import { useCalaborators } from "@/src/hooks/useCalaborators";
+import { useScales } from "@/src/hooks/useScales";
 
 import { Header } from "@/src/components/Header";
 import { ColaboratorCard } from "@/src/components/cards/ColaboratorCard";
@@ -29,24 +29,24 @@ export default function CreateScale() {
     setMonth,
     weekdays,
     toggleDay,
+    onSaveScale,
     periodScale,
     daysSelected,
     colaborators,
     colaboratorName,
+    setColaborators,
     colaboratorWoman,
-    onSaveScale,
     onAddColaborator,
     colaboratorSunday,
+    setColaboratorName,
     onRemoveColaborator,
+    setColaboratorWoman,
     colaboratorSchedule,
     showColaboratorCard,
-    setColaborators,
-    setColaboratorName,
-    setColaboratorWoman,
     setColaboratorSunday,
     setColaboratorSchedule,
     setShowColaboratorCard,
-  } = useCalaborators();
+  } = useScales();
 
   const onSaveColaborator = (
     id: string,

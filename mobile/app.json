@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Escala Fácil",
-    "slug": "escala-facil",
+    "slug": "escalafacil",
     "version": "1.7.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -39,12 +39,12 @@
     "experiments": {
       "typedRoutes": true
     },
-    "owner": "devbanned",
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "95feecd9-b662-4b5d-9e5f-4aa7b1b4c5f6"
+        "projectId": "c6d41128-f5d1-45a8-ba0d-08b61ebb2798"
       }
-    }
+    },
+    "owner": "qwa"
   }
 }

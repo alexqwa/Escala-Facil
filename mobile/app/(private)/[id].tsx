@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import * as Print from "expo-print";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
@@ -10,17 +11,16 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  KeyboardAvoidingView,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from "react-native";
 
 import { useDates } from "@/src/hooks/useDates";
-import { useCalaborators } from "@/src/hooks/useCalaborators";
+import { useScales } from "@/src/hooks/useScales";
 
 import { Header } from "@/src/components/Header";
 import { ColaboratorCard } from "@/src/components/cards/ColaboratorCard";
 import { FormColaboratorCard } from "@/src/components/cards/FormColaboratorCard";
-import dayjs from "dayjs";
 
 const ColaboratorCardMemo = memo(ColaboratorCard);
 
@@ -57,7 +57,7 @@ export default function EditPage() {
     setColaboratorSunday,
     setColaboratorSchedule,
     setShowColaboratorCard,
-  } = useCalaborators();
+  } = useScales();
 
   const onSaveColaborator = (
     id: string,

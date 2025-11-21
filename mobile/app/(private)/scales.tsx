@@ -5,10 +5,10 @@ import { View, FlatList } from "react-native";
 import { Header } from "@/src/components/Header";
 import { ScaleCard } from "@/src/components/ScaleCard";
 
-import { useCalaborators } from "@/src/hooks/useCalaborators";
+import { useScales } from "@/src/hooks/useScales";
 
 export default function Scales() {
-  const { loadScales, scales, onRemoveScale } = useCalaborators();
+  const { loadScales, scales, onRemoveScale } = useScales();
 
   useEffect(() => {
     loadScales();

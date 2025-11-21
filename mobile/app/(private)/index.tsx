@@ -4,12 +4,12 @@ import { Feather } from "@expo/vector-icons";
 import { useAuth, useUser } from "@clerk/clerk-expo";
 import { View, Text, TouchableOpacity, Dimensions, Image } from "react-native";
 
-import { useCalaborators } from "@/src/hooks/useCalaborators";
+import { useScales } from "@/src/hooks/useScales";
 
 export default function Home() {
   const { user } = useUser();
   const { signOut } = useAuth();
-  const { scales, loadScales } = useCalaborators();
+  const { scales, loadScales } = useScales();
   const height = Dimensions.get("window").height * 0.4;
 
   useEffect(() => {
